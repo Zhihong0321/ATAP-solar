@@ -1,5 +1,5 @@
-# Railway-ready Next.js image (standalone output)
-FROM node:20-alpine AS deps
+# Railway-ready Next.js image (Debian Slim - more stable than Alpine)
+FROM node:20-slim AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -9,7 +9,7 @@ WORKDIR /app
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
