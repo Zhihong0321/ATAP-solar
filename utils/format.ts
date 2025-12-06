@@ -31,8 +31,18 @@ function date(value: string) {
   });
 }
 
+function source(url: string) {
+  try {
+    const { hostname } = new URL(url);
+    return hostname.replace('www.', '');
+  } catch (e) {
+    return url;
+  }
+}
+
 export const format = {
   titleByLang,
   contentByLang,
-  date
+  date,
+  source
 };

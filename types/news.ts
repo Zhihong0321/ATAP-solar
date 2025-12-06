@@ -1,10 +1,5 @@
 export type Language = 'en' | 'cn' | 'my';
 
-export type NewsSource = {
-  name: string;
-  url?: string;
-};
-
 export type NewsTag = {
   id: string;
   name: string;
@@ -26,7 +21,7 @@ export type NewsItem = {
   content_my: string;
   news_date: string;
   image_url?: string;
-  sources: NewsSource[];
+  sources: string[]; // URLs
   is_published: boolean;
   is_highlight: boolean;
   category_id?: string;
