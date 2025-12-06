@@ -89,6 +89,7 @@ export default function Home() {
   const categoriesAbove = otherCategories.slice(0, midIndex);
   const categoriesBelow = otherCategories.slice(midIndex);
 
+  // Helper function to get news for a specific category
   const getNewsForCategory = (catId: string) => {
     return news
       .filter(n => 
@@ -109,7 +110,15 @@ export default function Home() {
     
     // Add Other Categories News IDs
     otherCategories.forEach(cat => {
-      getNewsForCategory(cat.id).forEach(n => categorizedIds.add(n.id));
+      // Re-use logic inline to satisfy linter or extract to useCallback
+      // Since it's inside useMemo, we can just filter here directly to track IDs
+      const catNews = news.filter(n => 
+        n.is_published && (
+          n.category?.id === cat.id || 
+          n.category_id === cat.id
+        )
+      );
+      catNews.forEach(n => categorizedIds.add(n.id));
     });
 
     // Return news not in the set

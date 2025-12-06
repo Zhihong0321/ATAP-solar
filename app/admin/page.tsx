@@ -779,7 +779,7 @@ export default function AdminPage() {
                                     content_cn: item.content_cn,
                                     content_my: item.content_my,
                                     news_date: item.news_date,
-                                    sources: (item.sources || []).map(s => s.name).join(', '),
+                                    sources: (item.sources || []).join(', '),
                                     is_published: item.is_published,
                                     is_highlight: item.is_highlight,
                                     category_id: item.category?.id || item.category_id || ''
