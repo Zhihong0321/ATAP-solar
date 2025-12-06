@@ -72,10 +72,14 @@ export async function fetchCategories(): Promise<Category[]> {
 }
 
 export async function createCategory(token: string, name: string): Promise<Category> {
-  return request<Category>('/api/v1/categories', {
+  return apiRequest<Category>('/api/v1/categories', {
     method: 'POST',
     headers: authHeaders(token),
-    body: JSON.stringify({ name })
+    body: JSON.stringify({ 
+      name_en: name,
+      name_cn: name,
+      name_my: name
+    })
   });
 }
 
@@ -91,7 +95,11 @@ export async function updateCategory(token: string, id: string, name: string): P
   return apiRequest<Category>(`/api/v1/categories/${id}`, {
     method: 'PUT',
     headers: authHeaders(token),
-    body: JSON.stringify({ name })
+    body: JSON.stringify({ 
+      name_en: name,
+      name_cn: name,
+      name_my: name
+    })
   });
 }
 
