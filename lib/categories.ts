@@ -49,6 +49,18 @@ export async function fetchCategories(): Promise<Category[]> {
   } catch (error: any) {
     console.error('Failed to fetch categories:', error);
     
+    // Check if error is due to schema mismatch
+    if (error.message?.includes('name_en') || error.message?.includes('name_cn') || error.message?.includes('name_my')) {
+      console.warn('Database schema mismatch - using fallback categories');
+      // Fallback to default categories when schema mismatch occurs
+      return [
+        { id: '1', name: 'Solar Policy', tags: [] },
+        { id: '2', name: 'Renewable Energy', tags: [] },
+        { id: '3', name: 'Industry News', tags: [] },
+        { id: '4', name: 'ATAP Updates', tags: [] }
+      ];
+    }
+    
     // Fallback to default categories in case API is down
     return [
       { id: '1', name: 'Solar Policy', tags: [] },
@@ -70,7 +82,12 @@ export async function createCategory(token: string, name: string): Promise<Categ
 export async function deleteCategory(token: string, id: string): Promise<void> {
   await request<void>(`/api/v1/categories/${id}`, {
     method: 'DELETE',
-    headers: authHeaders(token),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      // Custom header to indicate client expects base schema only
+      'X-Schema-Version': 'base-name-only'
+    },
     body: JSON.stringify({})
   });
 }
