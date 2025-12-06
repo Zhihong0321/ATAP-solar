@@ -37,16 +37,10 @@ function authHeaders(token: string) {
 }
 
 export async function adminCreateNews(token: string, payload: BasePayload): Promise<NewsItem> {
-  // Send both casing styles to ensure backend compatibility
-  const dualPayload = {
-    ...payload,
-    categoryId: payload.category_id,
-  };
-
   const data: any = await request<any>('/api/v1/news', {
     method: 'POST',
     headers: authHeaders(token),
-    body: JSON.stringify(dualPayload)
+    body: JSON.stringify(payload)
   });
   return data.data ?? data;
 }
@@ -56,16 +50,10 @@ export async function adminUpdateNews(
   id: string,
   payload: Partial<BasePayload>
 ): Promise<NewsItem> {
-  // Send both casing styles to ensure backend compatibility
-  const dualPayload = {
-    ...payload,
-    categoryId: payload.category_id,
-  };
-  
   const data: any = await request<any>(`/api/v1/news/${id}`, {
     method: 'PUT',
     headers: authHeaders(token),
-    body: JSON.stringify(dualPayload)
+    body: JSON.stringify(payload)
   });
   return data.data ?? data;
 }
