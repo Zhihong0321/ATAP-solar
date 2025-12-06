@@ -26,6 +26,22 @@ function authHeaders(token: string) {
   };
 }
 
+async function apiRequest<T>(path: string, init: RequestInit = {}) {
+  const url = new URL(path, API_BASE);
+  console.log(`🌐 API Request: ${init.method || 'GET'} ${path}`, {
+    headers: init.headers,
+    body: init.body ? JSON.parse(init.body as string) : undefined
+  });
+  
+  const res = await fetch(url.toString(), init);
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`${res.status} ${res.statusText}: ${text}`);
+  }
+  if (res.status === 204) return null as T;
+  return (await res.json()) as T;
+}
+
 async function request<T>(path: string, init: RequestInit = {}) {
   const url = new URL(path, API_BASE);
   const res = await fetch(url.toString(), init);
@@ -40,9 +56,17 @@ async function request<T>(path: string, init: RequestInit = {}) {
 // --- Categories ---
 
 export async function fetchCategories(): Promise<Category[]> {
-  const data = await request<any>('/api/v1/categories', {
+  console.log('📡 Fetching categories...');
+  
+  const data = await apiRequest<any>('/api/v1/categories', {
     cache: 'no-store'
   });
+  
+  console.log('✅ Categories fetched successfully:', {
+    total: data?.length || 0,
+    sample: data?.slice(0, 2) || []
+  });
+  
   // Adjust based on actual API response structure (data.data or direct array)
   return (data.data ?? data) as Category[];
 }
@@ -56,7 +80,7 @@ export async function createCategory(token: string, name: string): Promise<Categ
 }
 
 export async function deleteCategory(token: string, id: string): Promise<void> {
-  await request<void>(`/api/v1/categories/${id}`, {
+  await apiRequest<void>(`/api/v1/categories/${id}`, {
     method: 'DELETE',
     headers: authHeaders(token),
     body: JSON.stringify({})
@@ -64,7 +88,7 @@ export async function deleteCategory(token: string, id: string): Promise<void> {
 }
 
 export async function updateCategory(token: string, id: string, name: string): Promise<Category> {
-  return request<Category>(`/api/v1/categories/${id}`, {
+  return apiRequest<Category>(`/api/v1/categories/${id}`, {
     method: 'PUT',
     headers: authHeaders(token),
     body: JSON.stringify({ name })

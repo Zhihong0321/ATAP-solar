@@ -101,16 +101,34 @@ export function CategoryManager({ token }: CategoryManagerProps) {
   async function handleDeleteCategory(id: string) {
     if (!confirm('Delete this category? ALL tags inside it will be lost.')) return;
     setLoading(true);
+    
+    console.log('🗑️ Attempting to delete category:', id, `at ${new Date().toISOString()}`);
+    
     try {
+      console.log('📡 Sending DELETE request...');
       await deleteCategory(token, id);
+      console.log('✅ Category deletion successful');
+      
       setCategories(prev => prev.filter(c => c.id !== id));
       if (expandedCategoryId === id) setExpandedCategoryId(null);
-    } catch (err: any) {
-      console.error('Category deletion error:', err);
-      setError(`Deletion failed: ${err.message}. This may be due to database schema issues.`);
       
+      setError(null);
+    } catch (err: any) {
+      console.error('❌ Category deletion error:', err);
+      console.error('📊 Full error object:', {
+        message: err.message,
+        statusCode: err.statusCode,
+        code: err.code,
+        stack: err.stack
+      });
+      
+      setError(`Deletion failed: ${err.message}. Backend may be querying for non-existent schema fields.`);
+      
+      console.log('🔄 Refreshing categories list...');
       // Refresh categories to ensure list is still usable
-      loadCategories().catch(() => {});
+      loadCategories().catch((e) => {
+        console.error('Failed to refresh categories after deletion error:', e);
+      });
     } finally {
       setLoading(false);
     }
