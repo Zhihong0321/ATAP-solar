@@ -10,6 +10,7 @@ import { StockTicker } from '@/components/StockTicker';
 import { Language, NewsItem } from '@/types/news';
 import { fetchNews } from '@/lib/news';
 import { fetchCategories, Category } from '@/lib/categories';
+import { FEATURED_TAG_NAME } from '@/lib/constants';
 
 export default function Home() {
   const [language, setLanguage] = useState<Language>('en');
@@ -43,6 +44,11 @@ export default function Home() {
   // Logic for Main Category (Featured or First)
   const mainCategory = useMemo(() => {
     if (!categories.length) return null;
+    // Find category with the featured tag
+    const featured = categories.find(c => c.tags?.some(t => t.name === FEATURED_TAG_NAME));
+    if (featured) return featured;
+    
+    // Fallback: Try "Featured" name or first one
     return categories.find(c => c.name === 'Featured') || categories[0];
   }, [categories]);
 

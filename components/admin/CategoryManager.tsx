@@ -10,6 +10,7 @@ import {
   createTag, 
   deleteTag 
 } from '@/lib/categories';
+import { FEATURED_TAG_NAME } from '@/lib/constants';
 
 type CategoryManagerProps = {
   token: string;
@@ -36,6 +37,28 @@ export function CategoryManager({ token }: CategoryManagerProps) {
     } catch (err: any) {
       setError(err.message);
     } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSetFeatured(targetCatId: string) {
+    setLoading(true);
+    try {
+      // 1. Find existing featured tag across all categories
+      for (const cat of categories) {
+        const featuredTag = cat.tags?.find(t => t.name === FEATURED_TAG_NAME);
+        if (featuredTag) {
+          await deleteTag(token, featuredTag.id);
+        }
+      }
+      
+      // 2. Create new featured tag in target category
+      await createTag(token, targetCatId, FEATURED_TAG_NAME);
+      
+      // 3. Refresh
+      await loadCategories();
+    } catch (err: any) {
+      setError(err.message);
       setLoading(false);
     }
   }
@@ -114,7 +137,7 @@ export function CategoryManager({ token }: CategoryManagerProps) {
         <div>
           <h2 className="text-xl font-semibold text-text">Categories & Tags</h2>
           <p className="text-xs text-subtle mt-1">
-             Tip: Name a category <strong>&quot;Featured&quot;</strong> to display it in the main news slot on the homepage.
+             Select a category to be the <strong>Featured Section</strong> on the homepage.
           </p>
         </div>
         <button 
@@ -151,18 +174,36 @@ export function CategoryManager({ token }: CategoryManagerProps) {
 
       {/* List */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {categories.map(cat => (
+        {categories.map(cat => {
+          const isFeatured = cat.tags?.some(t => t.name === FEATURED_TAG_NAME);
+          return (
           <div 
             key={cat.id} 
             className={`border rounded-xl p-4 transition-all ${
-              expandedCategoryId === cat.id 
+              isFeatured 
                 ? 'border-accent bg-accent/5 ring-1 ring-accent/20' 
                 : 'border-border bg-surface/30 hover:border-accent/50'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-text">{cat.name}</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-text">{cat.name}</h3>
+                {isFeatured && (
+                  <span className="text-[10px] font-bold uppercase tracking-wider bg-accent text-surface px-2 py-0.5 rounded-full">
+                    Featured
+                  </span>
+                )}
+              </div>
               <div className="flex gap-2">
+                {!isFeatured && (
+                  <button
+                    onClick={() => handleSetFeatured(cat.id)}
+                    disabled={loading}
+                    className="text-xs px-2 py-1 rounded border border-border text-accent hover:bg-accent/10 disabled:opacity-50"
+                  >
+                    Set as Featured
+                  </button>
+                )}
                 <button
                   onClick={() => setExpandedCategoryId(expandedCategoryId === cat.id ? null : cat.id)}
                   className="text-xs px-2 py-1 rounded border border-border text-subtle hover:text-text hover:bg-surface"
@@ -178,14 +219,15 @@ export function CategoryManager({ token }: CategoryManagerProps) {
               </div>
             </div>
 
-            {/* Tags Section */}
             {expandedCategoryId === cat.id && (
               <div className="mt-4 pt-4 border-t border-border/50 animate-fade-in">
                 <h4 className="text-xs font-bold text-subtle uppercase tracking-wider mb-3">Tags</h4>
                 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {cat.tags && cat.tags.length > 0 ? (
-                    cat.tags.map(tag => (
+                    cat.tags
+                      .filter(tag => tag.name !== FEATURED_TAG_NAME)
+                      .map(tag => (
                       <span key={tag.id} className="inline-flex items-center gap-1 text-xs bg-surface border border-border px-2 py-1 rounded-md text-textSecondary">
                         #{tag.name}
                         <button 
@@ -219,7 +261,8 @@ export function CategoryManager({ token }: CategoryManagerProps) {
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

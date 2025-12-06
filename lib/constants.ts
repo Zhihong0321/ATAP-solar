@@ -1,0 +1,1 @@
+export const FEATURED_TAG_NAME = '_FEATURED_SECTION_';

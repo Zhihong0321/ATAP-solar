@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { NewsItem, Language } from '@/types/news';
 import { format } from '@/utils/format';
+import { FEATURED_TAG_NAME } from '@/lib/constants';
 
 type NewsListProps = {
   items: NewsItem[];
@@ -39,7 +40,7 @@ export function NewsList({ items, language }: NewsListProps) {
                       {news.category.name}
                     </span>
                   )}
-                  {news.tags?.map(tag => (
+                  {news.tags?.filter(t => t.name !== FEATURED_TAG_NAME).map(tag => (
                     <span key={tag.id} className="text-subtle bg-surface border border-border px-2 py-0.5 rounded">
                       #{tag.name}
                     </span>

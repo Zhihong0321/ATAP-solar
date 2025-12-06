@@ -9,6 +9,7 @@ import { Footer } from '@/components/Footer';
 import { fetchNewsById } from '@/lib/news';
 import { NewsItem, Language } from '@/types/news';
 import { format } from '@/utils/format';
+import { FEATURED_TAG_NAME } from '@/lib/constants';
 
 export default function NewsDetail() {
   const { id } = useParams();
@@ -111,7 +112,7 @@ export default function NewsDetail() {
             
             {news.tags && news.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
-                {news.tags.map(tag => (
+                {news.tags.filter(t => t.name !== FEATURED_TAG_NAME).map(tag => (
                   <span key={tag.id} className="text-xs font-medium text-subtle bg-surface border border-border px-2 py-1 rounded-full">
                     #{tag.name}
                   </span>
