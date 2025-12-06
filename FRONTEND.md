@@ -25,9 +25,8 @@ pnpm start
 ```
 
 ## Notes
-- Mock data lives in `data/mockNews.ts`; swap to API once backend is ready.
 - Layout uses Next.js App Router with Tailwind; output is `standalone` for Railway.
-- To use live API, set `NEXT_PUBLIC_API_BASE_URL` (and `API_BASE_URL` for SSR) to your API service URL; falls back to mock data if fetch fails.
+- To use live API, set `NEXT_PUBLIC_API_BASE_URL` (and `API_BASE_URL` for SSR) to your API service URL.
 
 ## Admin UI (simple CMS)
 - Visit `/admin` in the app to manage news (create, edit, publish/unpublish, highlight, delete).

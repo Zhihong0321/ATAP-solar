@@ -33,7 +33,6 @@ export default function Home() {
         setCategories(remoteCategories);
       } catch (err) {
         console.error('Failed to fetch data:', err);
-        // No fallback to mock data
       } finally {
         setLoading(false);
       }
