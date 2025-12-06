@@ -4,6 +4,15 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     optimizePackageImports: ['clsx']
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+    unoptimized: true
   }
 };
 
