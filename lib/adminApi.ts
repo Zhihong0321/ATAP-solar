@@ -1,9 +1,6 @@
 import { NewsItem } from '@/types/news';
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  process.env.API_BASE_URL ||
-  'https://atap-api-production.up.railway.app';
+const API_BASE = 'https://atap-api-production.up.railway.app';
 
 type BasePayload = {
   title_en: string;

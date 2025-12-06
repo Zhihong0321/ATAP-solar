@@ -1,32 +1,40 @@
-# Backend Issue Report
+# Backend Issue Report (Updated)
 
 **Severity**: Critical  
-**Impact**: Application is completely non-functional for news data retrieval.
+**Impact**: Application is completely non-functional.
 
-## Issue Description
-The production API endpoint `https://atap-api-production.up.railway.app/api/v1/news` is returning a **500 Internal Server Error**.
+## Latest Diagnostics (Sat, 06 Dec 2025)
 
-## Diagnostics
-- **URL**: `https://atap-api-production.up.railway.app/api/v1/news`
-- **Method**: `GET`
-- **Status Code**: `500 Internal Server Error`
-- **Response Body**:
-  ```json
-  {
-    "statusCode": 500,
-    "code": "P2021",
-    "error": "Internal Server Error",
-    "message": "\nInvalid `prisma.news.findMany()` invocation:\n\n\nThe table `public.News` does not exist in the current database."
-  }
-  ```
+The backend is exhibiting **inconsistent** and critical errors:
 
-## Root Cause
-The Prisma error `P2021` indicates that the database schema is out of sync with the application code. Specifically, the table `public.News` is missing from the connected database instance.
+### 1. Missing Tables (Persistent)
+Endpoint: `GET /api/v1/categories`
+```json
+{
+  "statusCode": 500,
+  "code": "P2021",
+  "message": "The table `public.Category` does not exist in the current database."
+}
+```
+**Meaning**: The database migration for the new Category/Tag features has **NOT** been applied.
 
-## Action Required
-1.  **Verify Database Connection**: Ensure the API is connected to the correct database instance.
-2.  **Run Migrations**: Execute `npx prisma migrate deploy` (or equivalent) to create the missing tables.
-3.  **Verify Schema**: Confirm that the `News` table exists in the `public` schema.
+### 4. Regression (Sat, 06 Dec 2025 06:18 GMT)
+The API has **failed again** after briefly working.
 
-## Status
-Frontend mock data fallbacks have been **removed** to expose this error as requested. The application will show an empty state or error message until the backend is fixed.
+Endpoint: `GET /api/v1/news`
+```json
+{
+  "statusCode": 500,
+  "code": "P1001",
+  "message": "Can't reach database server at `postgres.railway.internal:5432`"
+}
+```
+**Meaning**: The database connection has dropped again. It seems the backend service or database is unstable and restarting/crashing periodically.
+
+### 5. CORS Missing
+The headers returned by the API do **not** include `Access-Control-Allow-Origin`.
+This will cause the frontend to fail with "Network Error" even when the API returns 200, because the browser blocks the response.
+
+## Action Required for Backend Team
+1.  **Fix Database Stability**: The connection is flapping.
+2.  **Enable CORS**: You must set `Access-Control-Allow-Origin: *` (or the specific frontend domain) in your backend configuration. Without this, the frontend cannot load data.
