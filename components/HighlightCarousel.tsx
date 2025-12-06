@@ -47,9 +47,10 @@ export function HighlightCarousel({ items, language }: HighlightCarouselProps) {
           {/* Content */}
           <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
             <div className="max-w-2xl animate-fade-in">
-                <h2 className="font-serif text-2xl md:text-4xl font-bold text-white leading-tight drop-shadow-lg">
-                  {format.titleByLang(active, language)}
-                </h2>
+                <h2 
+                  className="font-serif text-2xl md:text-4xl font-bold text-white leading-tight drop-shadow-lg"
+                  dangerouslySetInnerHTML={{ __html: format.titleByLang(active, language) }}
+                />
                 <div className="mt-4 flex items-center gap-2">
                   <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs text-white font-medium">
                       Featured

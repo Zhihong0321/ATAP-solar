@@ -28,12 +28,12 @@ export function NewsList({ items, language }: NewsListProps) {
               className="flex flex-row items-start gap-4 md:gap-8 cursor-pointer group"
             >
               <div className="flex-1 space-y-3">
-                <h3 className="font-serif text-xl md:text-2xl font-bold text-text leading-snug group-hover:text-accent transition-colors">
-                  {format.titleByLang(news, language)}
-                </h3>
-                <p className="text-sm text-textSecondary leading-relaxed line-clamp-2">
-                  {format.contentByLang(news, language)}
-                </p>
+                <h3 className="font-serif text-xl md:text-2xl font-bold text-text leading-snug group-hover:text-accent transition-colors"
+                  dangerouslySetInnerHTML={{ __html: format.titleByLang(news, language) }}
+                />
+                <div className="text-sm text-textSecondary leading-relaxed line-clamp-2"
+                  dangerouslySetInnerHTML={{ __html: format.contentByLang(news, language) }}
+                />
                 <div className="flex flex-wrap gap-2 text-xs font-medium mt-2">
                   {news.category && (
                     <span className="text-accent bg-accent/10 px-2 py-0.5 rounded">

@@ -88,9 +88,10 @@ export default function NewsDetail() {
 
         <article className="space-y-8 animate-fade-in">
           <header className="space-y-4">
-            <h1 className="font-serif text-3xl md:text-5xl font-bold text-text leading-tight">
-              {format.titleByLang(news, language)}
-            </h1>
+            <h1 
+              className="font-serif text-3xl md:text-5xl font-bold text-text leading-tight"
+              dangerouslySetInnerHTML={{ __html: format.titleByLang(news, language) }}
+            />
             
             <div className="flex flex-wrap items-center gap-4 text-sm text-textSecondary">
               <span className="font-medium text-accent">
@@ -133,9 +134,10 @@ export default function NewsDetail() {
             />
           </div>
 
-          <div className="prose prose-lg prose-stone max-w-none text-text/90 leading-relaxed whitespace-pre-line">
-            {format.contentByLang(news, language)}
-          </div>
+          <div 
+            className="prose prose-lg prose-stone max-w-none text-text/90 leading-relaxed whitespace-pre-line"
+            dangerouslySetInnerHTML={{ __html: format.contentByLang(news, language) }}
+          />
         </article>
       </main>
       
