@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -14,7 +14,7 @@ import { getSettings, setSettings, FontSize, getFontSizeClass } from '@/utils/co
 import { formatCategoryDisplay, formatTagDisplay } from '@/utils/categoryFormat';
 
 export function NewsDetailClient({ news: initialNews }: { news: NewsItem }) {
-    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [language, setLanguage] = useState<Language>('en');
     const [fontSize, setFontSize] = useState<FontSize>('medium');
@@ -23,6 +23,16 @@ export function NewsDetailClient({ news: initialNews }: { news: NewsItem }) {
     useEffect(() => {
         setFontSize(getSettings().fontSize);
     }, []);
+
+    useEffect(() => {
+        const langParam = searchParams.get('lang');
+        const normalizedLang: Language = langParam === 'cn' || langParam === 'my' || langParam === 'en' ? langParam : 'en';
+        setLanguage(normalizedLang);
+
+        const html = document.documentElement;
+        html.dataset.lang = normalizedLang;
+        html.lang = normalizedLang === 'cn' ? 'zh-Hans' : normalizedLang;
+    }, [searchParams]);
 
     // Normalize primary source to support string or object payloads from the API.
     const primarySource = news?.sources?.[0];
