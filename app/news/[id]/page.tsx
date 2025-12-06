@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { SocialShare } from '@/components/SocialShare';
 import { fetchNewsById } from '@/lib/news';
 import { NewsItem, Language } from '@/types/news';
 import { format } from '@/utils/format';
@@ -124,6 +125,11 @@ export default function NewsDetail() {
           <div 
             className="prose prose-lg prose-stone max-w-none text-text/90 leading-relaxed whitespace-pre-line"
             dangerouslySetInnerHTML={{ __html: format.contentByLang(news, language) }}
+          />
+
+          <SocialShare 
+            title={format.titleByLang(news, language)} 
+            language={language}
           />
         </article>
       </main>

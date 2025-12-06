@@ -6,12 +6,14 @@ export type NewsTask = {
   account_name?: string;
   collection_uuid?: string;
   created_at?: string;
+  category_id?: string;
 };
 
 export type CreateTaskPayload = {
   query: string;
   account_name?: string;
   collection_uuid?: string;
+  category_id: string;
 };
 
 function authHeaders(token: string) {

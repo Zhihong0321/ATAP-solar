@@ -58,12 +58,14 @@ type TaskFormState = {
   query: string;
   account_name: string;
   collection_uuid: string;
+  category_id: string;
 };
 
 const emptyTaskForm: TaskFormState = {
   query: '',
   account_name: '',
-  collection_uuid: ''
+  collection_uuid: '',
+  category_id: ''
 };
 
 // --- Helper Components ---
@@ -508,7 +510,8 @@ export default function AdminPage() {
                             setTaskForm({
                               query: task.query,
                               account_name: task.account_name || '',
-                              collection_uuid: task.collection_uuid || ''
+                              collection_uuid: task.collection_uuid || '',
+                              category_id: task.category_id || ''
                             });
                           }}
                           className="rounded-lg border border-border px-3 py-1.5 text-xs text-subtle hover:text-text"
@@ -557,6 +560,19 @@ export default function AdminPage() {
                     value={taskForm.collection_uuid}
                     onChange={(e) => setTaskForm({ ...taskForm, collection_uuid: e.target.value })}
                   />
+                  <select
+                    value={taskForm.category_id}
+                    onChange={(e) => setTaskForm({ ...taskForm, category_id: e.target.value })}
+                    className="rounded-lg border border-border bg-surface/60 px-3 py-2 text-sm text-text focus:border-accent outline-none"
+                    required
+                  >
+                    <option value="">Select Category (Required)</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
                   <div className="flex gap-2 mt-2">
                     <button
                       type="submit"
