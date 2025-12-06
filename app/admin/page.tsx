@@ -663,7 +663,9 @@ export default function AdminPage() {
                       <div className="flex gap-2 text-xs text-subtle mt-1">
                         <span>{new Date(item.news_date).toLocaleDateString()}</span>
                         {item.sources && item.sources.length > 0 && (
-                          <span className="truncate max-w-[200px]">via {item.sources[0]}</span>
+                          <span className="truncate max-w-[200px]">
+                            via {typeof item.sources[0] === 'string' ? item.sources[0] : (item.sources[0] as any).name || (item.sources[0] as any).url}
+                          </span>
                         )}
                       </div>
                     </div>
