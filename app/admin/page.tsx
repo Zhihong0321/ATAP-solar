@@ -660,7 +660,12 @@ export default function AdminPage() {
                   <div key={item.id} className="flex items-center justify-between gap-4 rounded-xl border border-border bg-surface/20 p-3">
                     <div className="min-w-0 flex-1">
                       <h4 className="font-medium text-sm text-text truncate">{item.title_en || 'No Title'}</h4>
-                      <div className="flex gap-2 text-xs text-subtle mt-1">
+                      <div className="flex gap-2 text-xs text-subtle mt-1 items-center">
+                        {item.category && (
+                          <span className="bg-accent/10 text-accent px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                            {item.category.name}
+                          </span>
+                        )}
                         <span>{new Date(item.news_date).toLocaleDateString()}</span>
                         {item.sources && item.sources.length > 0 && (
                           <span className="truncate max-w-[200px]">
