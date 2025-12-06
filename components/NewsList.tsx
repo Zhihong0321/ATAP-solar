@@ -52,10 +52,9 @@ export function NewsList({ items, language }: NewsListProps) {
               </div>
               
               <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-2xl overflow-hidden bg-gray-100">
-                 {/* Ideally use news.image_url if available */}
                  <Image 
-                   src={placeholderImg} 
-                   alt=""
+                   src={news.image_url || placeholderImg} 
+                   alt={format.titleByLang(news, language)}
                    fill
                    className="object-cover transform group-hover:scale-110 transition-transform duration-500"
                  />

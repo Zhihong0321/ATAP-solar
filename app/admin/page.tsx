@@ -33,6 +33,7 @@ type NewsFormState = {
   content_cn: string;
   content_my: string;
   news_date: string;
+  image_url: string;
   sources: string; // comma separated names
   is_published: boolean;
   is_highlight: boolean;
@@ -47,6 +48,7 @@ const emptyNewsForm: NewsFormState = {
   content_cn: '',
   content_my: '',
   news_date: new Date().toISOString(),
+  image_url: '',
   sources: '',
   is_published: true,
   is_highlight: false,
@@ -662,6 +664,13 @@ export default function AdminPage() {
                           ))}
                         </select>
 
+                        <input
+                           placeholder="Image URL"
+                           value={newsForm.image_url}
+                           onChange={e => setNewsForm({...newsForm, image_url: e.target.value})}
+                           className="col-span-2 rounded-lg border border-border bg-surface/60 px-3 py-2 text-sm text-text"
+                        />
+
                         <div className="col-span-2 flex items-center gap-2">
                           <input
                             type="checkbox"
@@ -747,6 +756,7 @@ export default function AdminPage() {
                                     content_cn: item.content_cn,
                                     content_my: item.content_my,
                                     news_date: item.news_date,
+                                    image_url: item.image_url || '',
                                     sources: (item.sources || []).map(s => s.name).join(', '),
                                     is_published: item.is_published,
                                     is_highlight: item.is_highlight,

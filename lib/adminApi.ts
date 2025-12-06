@@ -10,6 +10,7 @@ type BasePayload = {
   content_cn: string;
   content_my: string;
   news_date: string;
+  image_url?: string;
   sources?: { name: string; url?: string }[];
   is_published?: boolean;
   is_highlight?: boolean;

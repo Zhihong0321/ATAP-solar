@@ -26,8 +26,7 @@ export function HighlightCarousel({ items, language }: HighlightCarouselProps) {
   if (!active) return null;
 
   // Placeholder image logic if no image is available in data
-  // Assuming mock data might not have images, so using a placeholder
-  const bgImage = 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80'; 
+  const bgImage = active.image_url || 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80'; 
 
   return (
     <section className="relative w-full px-4 pt-2 pb-6">

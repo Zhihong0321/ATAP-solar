@@ -58,17 +58,17 @@ export default function Home() {
   }, [categories, mainCategory]);
 
   const mainNews = useMemo(() => {
-    if (!mainCategory) return news; // If no categories, show all? Or show none? 
-    // If we have categories, strictly filter. If we have no categories (backend issue), show all news to avoid empty page?
-    // User requirement: "news in this category will be publish to news slot".
+    if (!mainCategory) return news.filter(n => n.is_published); // Fallback if no categories
     // If categories exist, we filter.
     if (categories.length > 0) {
       return news.filter(n => 
-        n.category?.id === mainCategory.id || 
-        n.category_id === mainCategory.id
+        n.is_published && (
+          n.category?.id === mainCategory.id || 
+          n.category_id === mainCategory.id
+        )
       );
     }
-    return news;
+    return news.filter(n => n.is_published);
   }, [news, mainCategory, categories]);
 
   const highlightedMain = useMemo(
@@ -92,8 +92,10 @@ export default function Home() {
   const getNewsForCategory = (catId: string) => {
     return news
       .filter(n => 
-        n.category?.id === catId || 
-        n.category_id === catId
+        n.is_published && (
+          n.category?.id === catId || 
+          n.category_id === catId
+        )
       )
       .sort((a, b) => new Date(b.news_date).getTime() - new Date(a.news_date).getTime());
   };
@@ -112,7 +114,7 @@ export default function Home() {
 
     // Return news not in the set
     return news
-      .filter(n => !categorizedIds.has(n.id))
+      .filter(n => n.is_published && !categorizedIds.has(n.id))
       .sort((a, b) => new Date(b.news_date).getTime() - new Date(a.news_date).getTime());
   }, [news, mainNews, otherCategories]);
 

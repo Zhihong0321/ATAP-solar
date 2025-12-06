@@ -71,7 +71,7 @@ export default function NewsDetail() {
   }
 
   // Placeholder logic consistent with NewsList
-  const bgImage = 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1200&q=80';
+  const bgImage = news.image_url || 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1200&q=80';
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

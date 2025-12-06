@@ -25,6 +25,7 @@ export type NewsItem = {
   content_cn: string;
   content_my: string;
   news_date: string;
+  image_url?: string;
   sources: NewsSource[];
   is_published: boolean;
   is_highlight: boolean;
