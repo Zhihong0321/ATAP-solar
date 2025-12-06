@@ -6,7 +6,7 @@ export function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center">
           <Image
-            src="/logo.png"
+            src="/logo-v2.png"
             alt="Solar Atap News"
             width={120}
             height={40}

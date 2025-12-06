@@ -36,6 +36,12 @@ export function NewsList({ items, language }: NewsListProps) {
                       {news.category.name}
                     </span>
                   )}
+                  {news.sources?.length > 0 && (
+                     <span className="text-textSecondary bg-surface border border-border px-2 py-0.5 rounded flex items-center gap-1">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 12v.01"/><path d="M12 16v.01"/></svg>
+                       {news.sources[0].name}
+                     </span>
+                  )}
                   {news.tags?.filter(t => t.name !== FEATURED_TAG_NAME).map(tag => (
                     <span key={tag.id} className="text-subtle bg-surface border border-border px-2 py-0.5 rounded">
                       #{tag.name}

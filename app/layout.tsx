@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   title: 'Malaysia Solar Atap News',
   description: 'Focused news hub for Malaysia solar rooftop insights.',
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: '/logo-v2.png',
+    apple: '/logo-v2.png',
   },
 };
 
