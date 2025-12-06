@@ -41,6 +41,12 @@ export default function Home() {
     load();
   }, []);
 
+  useEffect(() => {
+    const html = document.documentElement;
+    html.setAttribute('data-lang', language);
+    html.lang = language === 'cn' ? 'zh-Hans' : language;
+  }, [language]);
+
   // Logic for Main Category (Featured or First)
   const mainCategory = useMemo(() => {
     if (!categories.length) return null;
