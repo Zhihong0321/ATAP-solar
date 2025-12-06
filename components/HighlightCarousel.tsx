@@ -28,14 +28,17 @@ export function HighlightCarousel({ items, language }: HighlightCarouselProps) {
   // Placeholder image logic if no image is available in data
   const bgImage = active.image_url || 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80'; 
 
+  // Standard img tag used for background to handle external URLs better with referrer policy
   return (
     <section className="relative w-full px-4 pt-2 pb-6">
       <Link href={`/news/${active.id}`} className="block w-full">
         <div className="relative aspect-[16/10] md:aspect-[2/1] w-full overflow-hidden rounded-3xl shadow-xl cursor-pointer group">
           {/* Background Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
-            style={{ backgroundImage: `url(${bgImage})` }}
+          <img
+            src={bgImage}
+            alt="Background"
+            referrerPolicy="no-referrer"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
           
           {/* Gradient Overlay */}

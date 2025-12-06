@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { fetchNews } from '@/lib/news';
+import { fetchNews, fetchNewsById } from '@/lib/news';
 import {
   adminCreateNews,
   adminDeleteNews,
@@ -342,6 +342,23 @@ export default function AdminPage() {
       setNews((prev) => prev.filter((n) => n.id !== id));
     } catch (err: any) {
       setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleRefreshItem(id: string) {
+    setSaving(true);
+    try {
+      const fresh = await fetchNewsById(id);
+      if (fresh) {
+        setNews((prev) => prev.map((n) => (n.id === id ? fresh : n)));
+        alert(`Refreshed: ${fresh.title_en}\nCategory: ${fresh.category?.name || 'None'}\nImage: ${fresh.image_url ? 'Found' : 'Missing'}`);
+      } else {
+        alert('Failed to fetch fresh data.');
+      }
+    } catch (e) {
+      console.error(e);
     } finally {
       setSaving(false);
     }
@@ -773,6 +790,13 @@ export default function AdminPage() {
                               className="rounded-lg px-2 py-1.5 text-xs text-subtle hover:text-red-400"
                            >
                               ×
+                           </button>
+                           <button
+                              onClick={() => handleRefreshItem(item.id)}
+                              className="rounded-lg px-2 py-1.5 text-xs text-subtle hover:text-accent"
+                              title="Refresh from DB"
+                           >
+                              ↻
                            </button>
                         </div>
                      </div>

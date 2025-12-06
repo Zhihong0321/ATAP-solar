@@ -126,6 +126,8 @@ export default function NewsDetail() {
               src={bgImage} 
               alt={format.titleByLang(news, language)}
               fill
+              unoptimized
+              referrerPolicy="no-referrer"
               className="object-cover"
               priority
             />
