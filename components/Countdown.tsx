@@ -101,7 +101,7 @@ export function Countdown() {
               </span>
             </div>
             <h3 className="font-serif text-2xl md:text-3xl font-bold leading-tight">
-              Countdown to Dec 31, 2025 • 12:00 PM (MYT)
+              Solar ATAP Announcement
             </h3>
             <div className="flex items-center gap-2 text-sm text-gray-300 justify-center md:justify-start">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${isTicking ? 'animate-pulse' : ''}`}>
