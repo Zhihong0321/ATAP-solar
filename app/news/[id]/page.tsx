@@ -77,6 +77,11 @@ export default function NewsDetail() {
     );
   }
 
+  // Normalize primary source to support string or object payloads from the API.
+  const primarySource = news?.sources?.[0];
+  const sourceUrl = typeof primarySource === 'string' ? primarySource : primarySource?.url;
+  const sourceLabel = format.source(primarySource);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header currentLanguage={language} onLanguageChange={setLanguage} />
@@ -96,7 +101,7 @@ export default function NewsDetail() {
               className="font-serif text-3xl md:text-5xl font-bold text-text leading-tight"
               dangerouslySetInnerHTML={{ __html: format.titleByLang(news, language) }}
             />
-            
+
             <div className="flex flex-wrap items-center gap-4 text-sm text-textSecondary">
               <span className="font-medium text-accent">
                 {format.date(news.news_date)}
@@ -107,18 +112,25 @@ export default function NewsDetail() {
                   <span className="font-medium text-text">{formatCategoryDisplay(news.category, language)}</span>
                 </>
               )}
-              {news.sources.length > 0 && (
+              {primarySource && (
                 <>
                   <span className="text-subtle">•</span>
-                  <a 
-                    href={news.sources[0]} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 12v.01"/><path d="M12 16v.01"/></svg>
-                    {format.source(news.sources[0])}
-                  </a>
+                  {sourceUrl ? (
+                    <a 
+                      href={sourceUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 12v.01"/><path d="M12 16v.01"/></svg>
+                      {sourceLabel}
+                    </a>
+                  ) : (
+                    <span className="flex items-center gap-1 text-textSecondary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 12v.01"/><path d="M12 16v.01"/></svg>
+                      {sourceLabel}
+                    </span>
+                  )}
                 </>
               )}
             </div>
