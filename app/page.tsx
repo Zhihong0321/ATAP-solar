@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Header } from '@/components/Header';
 import { HighlightCarousel } from '@/components/HighlightCarousel';
+import { Countdown } from '@/components/Countdown';
 import { NewsList } from '@/components/NewsList';
 import DateSelector from '@/components/DateSelector';
 import { Footer } from '@/components/Footer';
@@ -131,6 +132,8 @@ export default function Home() {
       <Header currentLanguage={language} onLanguageChange={setLanguage} />
       
       <main className="mx-auto max-w-3xl flex flex-col gap-2 pb-10">
+
+        <Countdown />
         
         {/* Main Category Section */}
         {mainCategory && categories.length > 0 && (
