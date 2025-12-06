@@ -136,6 +136,7 @@ export default function AdminPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [tasks, setTasks] = useState<NewsTask[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [pendingNews, setPendingNews] = useState<NewsItem[]>([]);
   const [pendingCount, setPendingCount] = useState<number>(0);
 
   // UI State
@@ -195,6 +196,7 @@ export default function AdminPage() {
       ]);
       setNews(newsData);
       setTasks(tasksData);
+      setPendingNews(pendingBatch);
       setPendingCount(pendingBatch.length);
       setCategories(categoriesData);
     } catch (err) {
@@ -341,6 +343,8 @@ export default function AdminPage() {
     try {
       await adminDeleteNews(token, id);
       setNews((prev) => prev.filter((n) => n.id !== id));
+      setPendingNews((prev) => prev.filter((n) => n.id !== id));
+      setPendingCount((prev) => Math.max(0, prev - 1));
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -494,6 +498,11 @@ export default function AdminPage() {
                         <div className="flex gap-3 text-xs text-subtle mt-1">
                           {task.account_name && <span>ACCT: {task.account_name}</span>}
                           {task.collection_uuid && <span>COLL: {task.collection_uuid}</span>}
+                          {task.category_id && categories.find(c => c.id === task.category_id) && (
+                            <span className="bg-accent/10 text-accent px-1.5 rounded">
+                              CAT: {categories.find(c => c.id === task.category_id)?.name}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -640,6 +649,36 @@ export default function AdminPage() {
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-surface border border-border">3</div>
                     <p>Editor reviews & publishes</p>
                  </div>
+              </div>
+            </section>
+
+            {/* Ingestion Queue List */}
+            <section className="glass gradient-border rounded-3xl border border-border/60 p-6 shadow-card">
+              <h3 className="text-lg font-semibold text-text mb-4">Raw Leads ({pendingNews.length})</h3>
+              <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
+                {pendingNews.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between gap-4 rounded-xl border border-border bg-surface/20 p-3">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-medium text-sm text-text truncate">{item.title_en || 'No Title'}</h4>
+                      <div className="flex gap-2 text-xs text-subtle mt-1">
+                        <span>{new Date(item.news_date).toLocaleDateString()}</span>
+                        {item.sources && item.sources.length > 0 && (
+                          <span className="truncate max-w-[200px]">via {item.sources[0]}</span>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleNewsDelete(item.id)}
+                      className="text-subtle hover:text-red-400 p-2"
+                      title="Delete"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                {pendingNews.length === 0 && (
+                  <p className="text-center text-sm text-subtle py-8">No pending items.</p>
+                )}
               </div>
             </section>
 
