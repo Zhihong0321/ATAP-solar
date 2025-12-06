@@ -280,14 +280,26 @@ export default function AdminPage() {
     setSaving(true);
     const payload = {
       ...newsForm,
-      sources: newsForm.sources.split(',').map((s) => ({ name: s.trim() })).filter((s) => s.name)
+      sources: newsForm.sources.split(',').map((s) => ({ name: s.trim() })).filter((s) => s.name),
+      category_id: newsForm.category_id || null // Ensure null if empty string
     };
     try {
       if (editingNewsId) {
         const updated = await adminUpdateNews(token, editingNewsId, payload);
+        // Update news list but also update the category object if API didn't return it populated
         setNews((prev) => {
           const list = Array.isArray(prev) ? prev : [];
-          return list.map((n) => (n.id === updated.id ? updated : n));
+          return list.map((n) => {
+            if (n.id === updated.id) {
+              // Optimistically update category if available locally but not in response
+              if (payload.category_id && !updated.category) {
+                const cat = categories.find(c => c.id === payload.category_id);
+                if (cat) return { ...updated, category: cat };
+              }
+              return updated;
+            }
+            return n;
+          });
         });
       } else {
         const created = await adminCreateNews(token, payload);
