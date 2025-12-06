@@ -29,7 +29,8 @@ export async function fetchNews(params: FetchNewsParams = {}): Promise<NewsItem[
 
   const data = await res.json();
   // API returns { data: NewsItem[] }
-  return (data.data ?? data) as NewsItem[];
+  const items = (data.data ?? data);
+  return Array.isArray(items) ? items as NewsItem[] : [];
 }
 
 export async function fetchNewsById(id: string): Promise<NewsItem | null> {

@@ -321,7 +321,7 @@ export default function AdminPage() {
     );
   }
 
-  const filteredNews = news
+  const filteredNews = (Array.isArray(news) ? news : [])
     .filter((n) => {
       if (newsFilter === 'published') return n.is_published;
       if (newsFilter === 'draft') return !n.is_published;
@@ -414,7 +414,7 @@ export default function AdminPage() {
                 </div>
                 
                 <div className="space-y-3">
-                  {tasks.map((task) => (
+                  {Array.isArray(tasks) && tasks.map((task) => (
                     <div
                       key={task.id}
                       className="flex flex-col gap-3 rounded-xl border border-border bg-surface/50 p-4 transition md:flex-row md:items-center md:justify-between"
