@@ -13,6 +13,8 @@ type BasePayload = {
   sources?: { name: string; url?: string }[];
   is_published?: boolean;
   is_highlight?: boolean;
+  category_id?: string | null;
+  tag_ids?: string[];
 };
 
 async function request<T>(path: string, init: RequestInit = {}) {

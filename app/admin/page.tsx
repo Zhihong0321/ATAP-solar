@@ -20,7 +20,8 @@ import {
 } from '@/lib/adminTasks';
 import { adminProcessRewrites } from '@/lib/adminLeads';
 import { CategoryManager } from '@/components/admin/CategoryManager';
-import { NewsItem } from '@/types/news';
+import { NewsItem, NewsCategory } from '@/types/news';
+import { fetchCategories, Category } from '@/lib/categories';
 
 // --- Types ---
 
@@ -35,6 +36,7 @@ type NewsFormState = {
   sources: string; // comma separated names
   is_published: boolean;
   is_highlight: boolean;
+  category_id: string;
 };
 
 const emptyNewsForm: NewsFormState = {
@@ -47,7 +49,8 @@ const emptyNewsForm: NewsFormState = {
   news_date: new Date().toISOString(),
   sources: '',
   is_published: true,
-  is_highlight: false
+  is_highlight: false,
+  category_id: ''
 };
 
 type TaskFormState = {
@@ -129,6 +132,7 @@ export default function AdminPage() {
   // Data State
   const [news, setNews] = useState<NewsItem[]>([]);
   const [tasks, setTasks] = useState<NewsTask[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [pendingCount, setPendingCount] = useState<number>(0);
 
   // UI State
@@ -168,7 +172,7 @@ export default function AdminPage() {
     setLoading(true);
     setError(null);
     try {
-      const [newsData, tasksData, pendingBatch] = await Promise.all([
+      const [newsData, tasksData, pendingBatch, categoriesData] = await Promise.all([
         fetchNews({ limit: 100, offset: 0, content_status: 'filled' }).catch((e) => {
           console.error('Failed to fetch filled news:', e);
           return [];
@@ -180,11 +184,16 @@ export default function AdminPage() {
         fetchNews({ limit: 100, content_status: 'empty' }).catch((e) => {
           console.error('Failed to fetch empty news:', e);
           return [];
+        }),
+        fetchCategories().catch((e) => {
+          console.error('Failed to fetch categories:', e);
+          return [];
         })
       ]);
       setNews(newsData);
       setTasks(tasksData);
       setPendingCount(pendingBatch.length);
+      setCategories(categoriesData);
     } catch (err) {
       console.error(err);
       setError('Failed to load data. API might be unreachable or token invalid.');
@@ -627,6 +636,20 @@ export default function AdminPage() {
                            className="col-span-2 rounded-lg border border-border bg-surface/60 px-3 py-2 text-sm text-text"
                            required
                         />
+                        
+                        <select
+                          value={newsForm.category_id}
+                          onChange={e => setNewsForm({...newsForm, category_id: e.target.value})}
+                          className="col-span-2 rounded-lg border border-border bg-surface/60 px-3 py-2 text-sm text-text"
+                        >
+                          <option value="">Select Category</option>
+                          {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                              {cat.name}
+                            </option>
+                          ))}
+                        </select>
+
                          <textarea
                            placeholder="Content (EN)"
                            value={newsForm.content_en}
@@ -655,6 +678,11 @@ export default function AdminPage() {
                         <div className="flex-1 space-y-1">
                            <div className="flex items-center gap-2 mb-1">
                               <StatusBadge published={item.is_published} highlight={item.is_highlight} />
+                              {item.category && (
+                                <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-text">
+                                  {item.category.name}
+                                </span>
+                              )}
                               <span className="text-[10px] text-subtle uppercase tracking-wide">
                                  {new Date(item.news_date).toLocaleDateString()}
                               </span>
@@ -686,7 +714,8 @@ export default function AdminPage() {
                                     news_date: item.news_date,
                                     sources: (item.sources || []).map(s => s.name).join(', '),
                                     is_published: item.is_published,
-                                    is_highlight: item.is_highlight
+                                    is_highlight: item.is_highlight,
+                                    category_id: item.category?.id || ''
                                  });
                                  window.scrollTo({ top: 300, behavior: 'smooth' });
                               }}
