@@ -137,72 +137,72 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <Header currentLanguage={language} onLanguageChange={setLanguage} />
       
-      <main className="mx-auto max-w-3xl flex flex-col gap-2 pb-10">
-
-        <Countdown />
-        
-        {/* Main Category Section */}
-        {mainCategory && categories.length > 0 && (
-           <div className="px-4 py-2">
-             <span className="text-xs font-bold tracking-wider text-accent uppercase">
-               Featured Section
-             </span>
-             <h2 className="text-2xl font-bold text-text">{formatCategoryDisplay(mainCategory, language)}</h2>
-           </div>
-        )}
-
-        {/* Featured Carousel (Main Category Only) */}
-        <HighlightCarousel items={highlightedMain.length ? highlightedMain : sortedMainNews.slice(0, 5)} language={language} />
-        
-        {/* News Feed (Main Category) */}
-        <NewsList items={sortedMainNews} language={language} />
-
-        {/* Other Categories (Above Stock) */}
-        <div className="flex flex-col gap-12 mt-8">
-          {categoriesAbove.map(cat => {
-            const catNews = getNewsForCategory(cat.id);
-            if (!catNews.length) return null;
-            return (
-              <section key={cat.id} className="border-t border-border pt-8">
-                <div className="px-4 mb-6">
-                  <h2 className="text-2xl font-bold text-text">{formatCategoryDisplay(cat, language)}</h2>
-                </div>
-                <NewsList items={catNews} language={language} />
-              </section>
-            );
-          })}
-        </div>
-      </main>
-
-      <StockTicker />
+              <main className="mx-auto max-w-3xl flex flex-col gap-2 pb-10">
+                <h1 className="text-3xl font-bold text-center my-8">Malaysia Solar Atap News</h1>
       
-      <main className="mx-auto max-w-3xl flex flex-col gap-2 pb-10">
-        {/* Other Categories (Below Stock) */}
-        <div className="flex flex-col gap-12 mt-8">
-          {categoriesBelow.map(cat => {
-            const catNews = getNewsForCategory(cat.id);
-            if (!catNews.length) return null;
-            return (
-              <section key={cat.id} className="border-t border-border pt-8">
-                <div className="px-4 mb-6">
-                  <h2 className="text-2xl font-bold text-text">{formatCategoryDisplay(cat, language)}</h2>
-                </div>
-                <NewsList items={catNews} language={language} />
-              </section>
-            );
-          })}
-        </div>
-
-        {/* Fallback: Uncategorized / Latest News */}
-        {uncategorizedNews.length > 0 && (
-          <section className="border-t border-border pt-8 mt-8">
-            <div className="px-4 mb-6">
-              <h2 className="text-2xl font-bold text-text">Latest News</h2>
-            </div>
-            <NewsList items={uncategorizedNews} language={language} />
-          </section>
-        )}
-      </main>
+              <Countdown />
+              
+              {/* Main Category Section */}
+              {mainCategory && categories.length > 0 && (
+                 <div className="px-4 py-2">
+                   <span className="text-xs font-bold tracking-wider text-accent uppercase">
+                     Featured Section
+                   </span>
+                   <h3 className="text-2xl font-bold text-text">{formatCategoryDisplay(mainCategory, language)}</h3>
+                 </div>
+              )}
+      
+              {/* Featured Carousel (Main Category Only) */}
+              <HighlightCarousel items={highlightedMain.length ? highlightedMain : sortedMainNews.slice(0, 5)} language={language} />
+              
+              {/* News Feed (Main Category) */}
+              <NewsList items={sortedMainNews} language={language} />
+      
+              {/* Other Categories (Above Stock) */}
+              <div className="flex flex-col gap-12 mt-8">
+                {categoriesAbove.map(cat => {
+                  const catNews = getNewsForCategory(cat.id);
+                  if (!catNews.length) return null;
+                  return (
+                    <section key={cat.id} className="border-t border-border pt-8">
+                      <div className="px-4 mb-6">
+                        <h3 className="text-2xl font-bold text-text">{formatCategoryDisplay(cat, language)}</h3>
+                      </div>
+                      <NewsList items={catNews} language={language} />
+                    </section>
+                  );
+                })}
+              </div>
+            </main>
+      
+            <StockTicker />
+            
+            <main className="mx-auto max-w-3xl flex flex-col gap-2 pb-10">
+              {/* Other Categories (Below Stock) */}
+              <div className="flex flex-col gap-12 mt-8">
+                {categoriesBelow.map(cat => {
+                  const catNews = getNewsForCategory(cat.id);
+                  if (!catNews.length) return null;
+                  return (
+                    <section key={cat.id} className="border-t border-border pt-8">
+                      <div className="px-4 mb-6">
+                        <h3 className="text-2xl font-bold text-text">{formatCategoryDisplay(cat, language)}</h3>
+                      </div>
+                      <NewsList items={catNews} language={language} />
+                    </section>
+                  );
+                })}
+              </div>
+      
+              {/* Fallback: Uncategorized / Latest News */}
+              {uncategorizedNews.length > 0 && (
+                <section className="border-t border-border pt-8 mt-8">
+                  <div className="px-4 mb-6">
+                    <h3 className="text-2xl font-bold text-text">Latest News</h3>
+                  </div>
+                  <NewsList items={uncategorizedNews} language={language} />
+                </section>
+              )}      </main>
 
       <Footer />
     </div>

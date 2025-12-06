@@ -1,50 +1,3 @@
-import { GetServerSideProps, InferGetServerSidePropsType, Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { SocialShare } from '@/components/SocialShare';
-import { FontSizeControls } from '@/components/FontSizeControls';
-import { fetchNewsById } from '@/lib/news';
-import { NewsItem, Language } from '@/types/news';
-import { format } from '@/utils/format';
-import { FEATURED_TAG_NAME } from '@/lib/constants';
-import { getSettings, setSettings, FontSize, getFontSizeClass } from '@/utils/cookies';
-import { formatCategoryDisplay, formatTagDisplay } from '@/utils/categoryFormat';
-import { NewsDetailClient } from './page.client';
-
-type Props = {
-    params: { id: string };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const id = params.id;
-    const news = await fetchNewsById(id);
-
-    if (!news) {
-        return {
-            title: 'News Not Found',
-            description: 'The news article you are looking for does not exist.',
-        };
-    }
-
-    return {
-        title: `${news.title_en} | Malaysia Solar Atap News`,
-        description: news.content_en.substring(0, 160),
-    };
-}
-
-
-export default async function NewsDetail({ params }: Props) {
-    const news = await fetchNewsById(params.id);
-
-    if (!news) {
-        notFound();
-    }
-
-    return <NewsDetailClient news={news} />;
-}
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -76,8 +29,24 @@ export function NewsDetailClient({ news: initialNews }: { news: NewsItem }) {
     const sourceUrl = typeof primarySource === 'string' ? primarySource : primarySource?.url;
     const sourceLabel = format.source(primarySource);
 
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'NewsArticle',
+        headline: news.title_en,
+        description: news.content_en.substring(0, 160),
+        datePublished: news.news_date,
+        author: {
+            '@type': 'Organization',
+            name: 'Malaysia Solar Atap News',
+        },
+    };
+
     return (
         <div className="min-h-screen bg-background flex flex-col">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <Header currentLanguage={language} onLanguageChange={setLanguage} />
 
             <main className="flex-1 w-full max-w-3xl mx-auto px-4 py-8 md:py-12">
