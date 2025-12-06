@@ -34,11 +34,12 @@ function authHeaders(token: string) {
 }
 
 export async function adminCreateNews(token: string, payload: BasePayload): Promise<NewsItem> {
-  return request<NewsItem>('/api/v1/news', {
+  const data: any = await request<any>('/api/v1/news', {
     method: 'POST',
     headers: authHeaders(token),
     body: JSON.stringify(payload)
   });
+  return data.data ?? data;
 }
 
 export async function adminUpdateNews(
@@ -46,11 +47,12 @@ export async function adminUpdateNews(
   id: string,
   payload: Partial<BasePayload>
 ): Promise<NewsItem> {
-  return request<NewsItem>(`/api/v1/news/${id}`, {
+  const data: any = await request<any>(`/api/v1/news/${id}`, {
     method: 'PUT',
     headers: authHeaders(token),
     body: JSON.stringify(payload)
   });
+  return data.data ?? data;
 }
 
 export async function adminPublishNews(
@@ -58,11 +60,12 @@ export async function adminPublishNews(
   id: string,
   payload: { is_published?: boolean; is_highlight?: boolean }
 ): Promise<NewsItem> {
-  return request<NewsItem>(`/api/v1/news/${id}/publish`, {
+  const data: any = await request<any>(`/api/v1/news/${id}/publish`, {
     method: 'PATCH',
     headers: authHeaders(token),
     body: JSON.stringify(payload)
   });
+  return data.data ?? data;
 }
 
 export async function adminDeleteNews(token: string, id: string): Promise<void> {

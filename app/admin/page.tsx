@@ -201,10 +201,16 @@ export default function AdminPage() {
     try {
       if (editingTaskId) {
         const updated = await adminUpdateTask(token, editingTaskId, taskForm);
-        setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+        setTasks((prev) => {
+          const list = Array.isArray(prev) ? prev : [];
+          return list.map((t) => (t.id === updated.id ? updated : t));
+        });
       } else {
         const created = await adminCreateTask(token, taskForm);
-        setTasks((prev) => [created, ...prev]);
+        setTasks((prev) => {
+          const list = Array.isArray(prev) ? prev : [];
+          return [created, ...list];
+        });
       }
       setEditingTaskId(null);
       setTaskForm(emptyTaskForm);
@@ -270,10 +276,16 @@ export default function AdminPage() {
     try {
       if (editingNewsId) {
         const updated = await adminUpdateNews(token, editingNewsId, payload);
-        setNews((prev) => prev.map((n) => (n.id === updated.id ? updated : n)));
+        setNews((prev) => {
+          const list = Array.isArray(prev) ? prev : [];
+          return list.map((n) => (n.id === updated.id ? updated : n));
+        });
       } else {
         const created = await adminCreateNews(token, payload);
-        setNews((prev) => [created, ...prev]);
+        setNews((prev) => {
+          const list = Array.isArray(prev) ? prev : [];
+          return [created, ...list];
+        });
       }
       setEditingNewsId(null);
       setNewsForm(emptyNewsForm);
@@ -288,7 +300,10 @@ export default function AdminPage() {
     setSaving(true);
     try {
       const updated = await adminPublishNews(token, item.id, { [key]: !item[key] });
-      setNews((prev) => prev.map((n) => (n.id === updated.id ? updated : n)));
+      setNews((prev) => {
+        const list = Array.isArray(prev) ? prev : [];
+        return list.map((n) => (n.id === updated.id ? updated : n));
+      });
     } catch (err: any) {
       setError(err.message);
     } finally {

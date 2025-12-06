@@ -33,17 +33,20 @@ async function request<T>(path: string, init: RequestInit = {}) {
 }
 
 export async function adminFetchTasks(token: string): Promise<NewsTask[]> {
-  return request<NewsTask[]>('/api/v1/news-tasks', {
+  const data: any = await request<any>('/api/v1/news-tasks', {
     headers: authHeaders(token)
   });
+  const items = data.data ?? data;
+  return Array.isArray(items) ? items : [];
 }
 
 export async function adminCreateTask(token: string, payload: CreateTaskPayload): Promise<NewsTask> {
-  return request<NewsTask>('/api/v1/news-tasks', {
+  const data: any = await request<any>('/api/v1/news-tasks', {
     method: 'POST',
     headers: authHeaders(token),
     body: JSON.stringify(payload)
   });
+  return data.data ?? data;
 }
 
 export async function adminUpdateTask(
@@ -51,11 +54,12 @@ export async function adminUpdateTask(
   id: string,
   payload: Partial<CreateTaskPayload>
 ): Promise<NewsTask> {
-  return request<NewsTask>(`/api/v1/news-tasks/${id}`, {
+  const data: any = await request<any>(`/api/v1/news-tasks/${id}`, {
     method: 'PUT',
     headers: authHeaders(token),
     body: JSON.stringify(payload)
   });
+  return data.data ?? data;
 }
 
 export async function adminDeleteTask(token: string, id: string): Promise<void> {
