@@ -71,6 +71,7 @@ export async function adminPublishNews(
 export async function adminDeleteNews(token: string, id: string): Promise<void> {
   await request<void>(`/api/v1/news/${id}`, {
     method: 'DELETE',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    body: JSON.stringify({})
   });
 }

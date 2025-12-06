@@ -65,13 +65,15 @@ export async function adminUpdateTask(
 export async function adminDeleteTask(token: string, id: string): Promise<void> {
   await request<void>(`/api/v1/news-tasks/${id}`, {
     method: 'DELETE',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    body: JSON.stringify({})
   });
 }
 
 export async function adminRunTask(token: string, id: string): Promise<void> {
   await request<void>(`/api/v1/news-tasks/${id}/run`, {
     method: 'POST',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    body: JSON.stringify({})
   });
 }

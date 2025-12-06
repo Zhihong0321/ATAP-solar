@@ -21,6 +21,7 @@ async function request<T>(path: string, init: RequestInit = {}) {
 export async function adminProcessRewrites(token: string): Promise<void> {
   await request<void>('/api/v1/news-leads/process-rewrites', {
     method: 'POST',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    body: JSON.stringify({})
   });
 }

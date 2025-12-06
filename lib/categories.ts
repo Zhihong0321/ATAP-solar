@@ -50,7 +50,8 @@ export async function createCategory(token: string, name: string): Promise<Categ
 export async function deleteCategory(token: string, id: string): Promise<void> {
   await request<void>(`/api/v1/categories/${id}`, {
     method: 'DELETE',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    body: JSON.stringify({})
   });
 }
 
@@ -75,6 +76,7 @@ export async function createTag(token: string, categoryId: string, name: string)
 export async function deleteTag(token: string, tagId: string): Promise<void> {
   await request<void>(`/api/v1/tags/${tagId}`, {
     method: 'DELETE',
-    headers: authHeaders(token)
+    headers: authHeaders(token),
+    body: JSON.stringify({})
   });
 }
