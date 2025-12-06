@@ -23,6 +23,7 @@ import { adminProcessRewrites } from '@/lib/adminLeads';
 import { CategoryManager } from '@/components/admin/CategoryManager';
 import { NewsItem, NewsCategory } from '@/types/news';
 import { fetchCategories, Category } from '@/lib/categories';
+import { formatCategoryDisplay } from '@/utils/categoryFormat';
 
 // --- Types ---
 
@@ -500,7 +501,7 @@ export default function AdminPage() {
                           {task.collection_uuid && <span>COLL: {task.collection_uuid}</span>}
                           {task.category_id && categories.find(c => c.id === task.category_id) && (
                             <span className="bg-accent/10 text-accent px-1.5 rounded">
-                              CAT: {categories.find(c => c.id === task.category_id)?.name}
+                              CAT: {formatCategoryDisplay(categories.find(c => c.id === task.category_id)!, 'en')}
                             </span>
                           )}
                         </div>
@@ -578,7 +579,7 @@ export default function AdminPage() {
                     <option value="">Select Category (Required)</option>
                     {categories.map((cat) => (
                       <option key={cat.id} value={cat.id}>
-                        {cat.name}
+                        {formatCategoryDisplay(cat, 'en')}
                       </option>
                     ))}
                   </select>
@@ -663,7 +664,7 @@ export default function AdminPage() {
                       <div className="flex gap-2 text-xs text-subtle mt-1 items-center">
                         {item.category && (
                           <span className="bg-accent/10 text-accent px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
-                            {item.category.name}
+                            {formatCategoryDisplay(item.category, 'en')}
                           </span>
                         )}
                         <span>{new Date(item.news_date).toLocaleDateString()}</span>
@@ -751,7 +752,7 @@ export default function AdminPage() {
                           <option value="">Select Category</option>
                           {categories.map((cat) => (
                             <option key={cat.id} value={cat.id}>
-                              {cat.name}
+                              {formatCategoryDisplay(cat, 'en')}
                             </option>
                           ))}
                         </select>
@@ -799,7 +800,7 @@ export default function AdminPage() {
                               <StatusBadge published={item.is_published} highlight={item.is_highlight} />
                               {(item.category || (item.category_id && categories.find(c => c.id === item.category_id))) && (
                                 <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-text">
-                                  {item.category?.name || categories.find(c => c.id === item.category_id)?.name}
+                                  {item.category ? formatCategoryDisplay(item.category, 'en') : formatCategoryDisplay(categories.find(c => c.id === item.category_id)!, 'en')}
                                 </span>
                               )}
                               <span className="text-[10px] text-subtle uppercase tracking-wide">

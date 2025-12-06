@@ -6,21 +6,28 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { SocialShare } from '@/components/SocialShare';
+import { FontSizeControls } from '@/components/FontSizeControls';
 import { fetchNewsById } from '@/lib/news';
 import { NewsItem, Language } from '@/types/news';
 import { format } from '@/utils/format';
 import { FEATURED_TAG_NAME } from '@/lib/constants';
+import { getSettings, setSettings, FontSize, getFontSizeClass } from '@/utils/cookies';
+import { formatCategoryDisplay, formatTagDisplay } from '@/utils/categoryFormat';
 
 export default function NewsDetail() {
   const { id } = useParams();
   const router = useRouter();
   
   const [language, setLanguage] = useState<Language>('en');
+  const [fontSize, setFontSize] = useState<FontSize>('medium');
   const [news, setNews] = useState<NewsItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    // Load font size settings
+    setFontSize(getSettings().fontSize);
+    
     if (!id) return;
     
     const load = async () => {
@@ -97,16 +104,21 @@ export default function NewsDetail() {
               {news.category && (
                 <>
                   <span className="text-subtle">•</span>
-                  <span className="font-medium text-text">{news.category.name}</span>
+                  <span className="font-medium text-text">{formatCategoryDisplay(news.category, language)}</span>
                 </>
               )}
               {news.sources.length > 0 && (
                 <>
                   <span className="text-subtle">•</span>
-                  <span className="flex items-center gap-1">
+                  <a 
+                    href={news.sources[0]} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors"
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><path d="M8.5 8.5v.01"/><path d="M16 12v.01"/><path d="M12 16v.01"/></svg>
                     {format.source(news.sources[0])}
-                  </span>
+                  </a>
                 </>
               )}
             </div>
@@ -115,15 +127,27 @@ export default function NewsDetail() {
               <div className="flex flex-wrap gap-2 mt-2">
                 {news.tags.filter(t => t.name !== FEATURED_TAG_NAME).map(tag => (
                   <span key={tag.id} className="text-xs font-medium text-subtle bg-surface border border-border px-2 py-1 rounded-full">
-                    #{tag.name}
+                    #{formatTagDisplay(tag, language)}
                   </span>
                 ))}
               </div>
             )}
           </header>
 
+          <div className="flex items-center justify-between mb-6">
+            <FontSizeControls 
+              onFontSizeChange={(newSize) => setFontSize(newSize)}
+            />
+            <Link 
+              href="/settings"
+              className="text-sm text-accent hover:text-accent/80 transition-colors"
+            >
+              More Settings
+            </Link>
+          </div>
+
           <div 
-            className="prose prose-lg prose-stone max-w-none text-text/90 leading-relaxed whitespace-pre-line"
+            className={`prose prose-lg prose-stone max-w-none text-text/90 leading-relaxed whitespace-pre-line ${getFontSizeClass(fontSize)}`}
             dangerouslySetInnerHTML={{ __html: format.contentByLang(news, language) }}
           />
 

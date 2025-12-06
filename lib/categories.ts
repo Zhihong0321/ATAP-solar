@@ -3,11 +3,19 @@ const API_BASE = 'https://atap-api-production.up.railway.app';
 export type Tag = {
   id: string;
   name: string;
+  // Optional multilingual support if added later
+  name_en?: string;
+  name_cn?: string;
+  name_my?: string;
 };
 
 export type Category = {
   id: string;
   name: string;
+  // Optional multilingual support if added later
+  name_en?: string;
+  name_cn?: string;
+  name_my?: string;
   tags?: Tag[];
 };
 
@@ -32,11 +40,23 @@ async function request<T>(path: string, init: RequestInit = {}) {
 // --- Categories ---
 
 export async function fetchCategories(): Promise<Category[]> {
-  const data = await request<any>('/api/v1/categories', {
-    cache: 'no-store'
-  });
-  // Adjust based on actual API response structure (data.data or direct array)
-  return (data.data ?? data) as Category[];
+  try {
+    const data = await request<any>('/api/v1/categories', {
+      cache: 'no-store'
+    });
+    // Adjust based on actual API response structure (data.data or direct array)
+    return (data.data ?? data) as Category[];
+  } catch (error: any) {
+    console.error('Failed to fetch categories:', error);
+    
+    // Fallback to default categories in case API is down
+    return [
+      { id: '1', name: 'Solar Policy', tags: [] },
+      { id: '2', name: 'Renewable Energy', tags: [] },
+      { id: '3', name: 'Industry News', tags: [] },
+      { id: '4', name: 'ATAP Updates', tags: [] }
+    ];
+  }
 }
 
 export async function createCategory(token: string, name: string): Promise<Category> {

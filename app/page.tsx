@@ -11,6 +11,7 @@ import { Language, NewsItem } from '@/types/news';
 import { fetchNews } from '@/lib/news';
 import { fetchCategories, Category } from '@/lib/categories';
 import { FEATURED_TAG_NAME } from '@/lib/constants';
+import { formatCategoryDisplay } from '@/utils/categoryFormat';
 
 export default function Home() {
   const [language, setLanguage] = useState<Language>('en');
@@ -140,7 +141,7 @@ export default function Home() {
              <span className="text-xs font-bold tracking-wider text-accent uppercase">
                Featured Section
              </span>
-             <h2 className="text-2xl font-bold text-text">{mainCategory.name}</h2>
+             <h2 className="text-2xl font-bold text-text">{formatCategoryDisplay(mainCategory, language)}</h2>
            </div>
         )}
 
@@ -158,7 +159,7 @@ export default function Home() {
             return (
               <section key={cat.id} className="border-t border-border pt-8">
                 <div className="px-4 mb-6">
-                  <h2 className="text-2xl font-bold text-text">{cat.name}</h2>
+                  <h2 className="text-2xl font-bold text-text">{formatCategoryDisplay(cat, language)}</h2>
                 </div>
                 <NewsList items={catNews} language={language} />
               </section>
@@ -178,7 +179,7 @@ export default function Home() {
             return (
               <section key={cat.id} className="border-t border-border pt-8">
                 <div className="px-4 mb-6">
-                  <h2 className="text-2xl font-bold text-text">{cat.name}</h2>
+                  <h2 className="text-2xl font-bold text-text">{formatCategoryDisplay(cat, language)}</h2>
                 </div>
                 <NewsList items={catNews} language={language} />
               </section>

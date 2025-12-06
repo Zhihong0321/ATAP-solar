@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { NewsItem, Language } from '@/types/news';
 import { format } from '@/utils/format';
 import { FEATURED_TAG_NAME } from '@/lib/constants';
+import { formatCategoryDisplay, formatTagDisplay } from '@/utils/categoryFormat';
 
 type NewsListProps = {
   items: NewsItem[];
@@ -33,7 +34,7 @@ export function NewsList({ items, language }: NewsListProps) {
                 <div className="flex flex-wrap gap-2 text-xs font-medium mt-2">
                   {news.category && (
                     <span className="text-accent bg-accent/10 px-2 py-0.5 rounded">
-                      {news.category.name}
+                      {formatCategoryDisplay(news.category, language)}
                     </span>
                   )}
                   {news.sources?.length > 0 && (
@@ -44,7 +45,7 @@ export function NewsList({ items, language }: NewsListProps) {
                   )}
                   {news.tags?.filter(t => t.name !== FEATURED_TAG_NAME).map(tag => (
                     <span key={tag.id} className="text-subtle bg-surface border border-border px-2 py-0.5 rounded">
-                      #{tag.name}
+                      #{formatTagDisplay(tag, language)}
                     </span>
                   ))}
                   <span className="text-subtle py-0.5">

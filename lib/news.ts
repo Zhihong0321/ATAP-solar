@@ -18,19 +18,26 @@ export async function fetchNews(params: FetchNewsParams = {}): Promise<NewsItem[
   if (params.offset !== undefined) url.searchParams.set('offset', String(params.offset));
   if (params.content_status !== undefined) url.searchParams.set('content_status', params.content_status);
 
-  const res = await fetch(url.toString(), {
-    headers: { 'Content-Type': 'application/json' },
-    cache: 'no-store'
-  });
+  try {
+    const res = await fetch(url.toString(), {
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store'
+    });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch news: ${res.status}`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch news: ${res.status}`);
+    }
+
+    const data = await res.json();
+    // API returns { data: NewsItem[] }
+    const items = (data.data ?? data);
+    return Array.isArray(items) ? items as NewsItem[] : [];
+  } catch (error: any) {
+    console.error('Error fetching news:', error);
+    
+    // Return empty array on error to prevent app crashes
+    return [];
   }
-
-  const data = await res.json();
-  // API returns { data: NewsItem[] }
-  const items = (data.data ?? data);
-  return Array.isArray(items) ? items as NewsItem[] : [];
 }
 
 export async function fetchNewsById(id: string): Promise<NewsItem | null> {

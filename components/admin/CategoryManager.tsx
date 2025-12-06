@@ -11,6 +11,7 @@ import {
   deleteTag 
 } from '@/lib/categories';
 import { FEATURED_TAG_NAME } from '@/lib/constants';
+import { formatCategoryDisplay, formatTagDisplay } from '@/utils/categoryFormat';
 
 type CategoryManagerProps = {
   token: string;
@@ -187,7 +188,7 @@ export function CategoryManager({ token }: CategoryManagerProps) {
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-text">{cat.name}</h3>
+                <h3 className="font-semibold text-text">{formatCategoryDisplay(cat, 'en')}</h3>
                 {isFeatured && (
                   <span className="text-[10px] font-bold uppercase tracking-wider bg-accent text-surface px-2 py-0.5 rounded-full">
                     Featured
@@ -229,7 +230,7 @@ export function CategoryManager({ token }: CategoryManagerProps) {
                       .filter(tag => tag.name !== FEATURED_TAG_NAME)
                       .map(tag => (
                       <span key={tag.id} className="inline-flex items-center gap-1 text-xs bg-surface border border-border px-2 py-1 rounded-md text-textSecondary">
-                        #{tag.name}
+                        #{formatTagDisplay(tag, 'en')}
                         <button 
                           onClick={() => handleDeleteTag(tag.id)}
                           className="hover:text-red-400 ml-1"
