@@ -353,7 +353,8 @@ export default function AdminPage() {
       const fresh = await fetchNewsById(id);
       if (fresh) {
         setNews((prev) => prev.map((n) => (n.id === id ? fresh : n)));
-        alert(`Refreshed: ${fresh.title_en}\nCategory: ${fresh.category?.name || 'None'}\nImage: ${fresh.image_url ? 'Found' : 'Missing'}`);
+        const hasImg = fresh.image_url && fresh.image_url.startsWith('http');
+        alert(`Refreshed: ${fresh.title_en}\nCategory: ${fresh.category?.name || 'None'}\nImage: ${hasImg ? 'URL Present' : 'No URL'}`);
       } else {
         alert('Failed to fetch fresh data.');
       }
@@ -738,13 +739,17 @@ export default function AdminPage() {
                                  {new Date(item.news_date).toLocaleDateString()}
                               </span>
                            </div>
-                           {item.image_url && (
+                           {item.image_url && item.image_url.startsWith('http') && (
                              <div className="relative mt-2 h-20 w-32 overflow-hidden rounded-lg border border-border/50">
                                <img 
                                  src={item.image_url} 
                                  alt="Thumbnail" 
                                  className="h-full w-full object-cover"
                                  referrerPolicy="no-referrer"
+                                 onError={(e) => {
+                                   e.currentTarget.style.display = 'none';
+                                   e.currentTarget.parentElement!.innerHTML = '<span class="text-[10px] text-red-400 p-2 flex h-full items-center justify-center bg-gray-50">Broken Link</span>';
+                                 }}
                                />
                              </div>
                            )}
