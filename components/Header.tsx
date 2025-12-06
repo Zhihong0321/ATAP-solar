@@ -18,7 +18,7 @@ export function Header({ onLanguageChange, currentLanguage }: HeaderProps) {
       <div className="flex items-center justify-between">
         <Link href="/" className="block">
           <Image
-            src="/logo-v2.png"
+            src="/logo-v2.webp"
             alt="Malaysia Solar Atap News"
             width={150}
             height={50}

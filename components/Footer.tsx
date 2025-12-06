@@ -19,8 +19,8 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center">
               <Image
-                src="/logo-v2.png"
-                alt="Solar ATAP"
+                src="/logo-v2.webp"
+                alt="Malaysia Solar Atap News"
                 width={120}
                 height={40}
                 className="h-10 w-auto object-contain"
