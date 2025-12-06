@@ -97,7 +97,7 @@ export function Countdown() {
                 Malaysia Solar ATAP
               </span>
               <span className={`text-[10px] px-2 py-1 rounded-full border border-white/10 bg-white/5 ${isFastForwarding ? 'animate-pulse' : ''}`}>
-                Official Announcement
+                Solar ATAP Announcement
               </span>
             </div>
             <h3 className="font-serif text-2xl md:text-3xl font-bold leading-tight">
