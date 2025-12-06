@@ -28,6 +28,7 @@ export type NewsItem = {
   sources: NewsSource[];
   is_published: boolean;
   is_highlight: boolean;
+  category_id?: string;
   category?: NewsCategory;
   tags?: NewsTag[];
 };

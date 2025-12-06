@@ -63,7 +63,10 @@ export default function Home() {
     // User requirement: "news in this category will be publish to news slot".
     // If categories exist, we filter.
     if (categories.length > 0) {
-      return news.filter(n => n.category?.id === mainCategory.id);
+      return news.filter(n => 
+        n.category?.id === mainCategory.id || 
+        n.category_id === mainCategory.id
+      );
     }
     return news;
   }, [news, mainCategory, categories]);
@@ -88,7 +91,10 @@ export default function Home() {
 
   const getNewsForCategory = (catId: string) => {
     return news
-      .filter(n => n.category?.id === catId)
+      .filter(n => 
+        n.category?.id === catId || 
+        n.category_id === catId
+      )
       .sort((a, b) => new Date(b.news_date).getTime() - new Date(a.news_date).getTime());
   };
 
