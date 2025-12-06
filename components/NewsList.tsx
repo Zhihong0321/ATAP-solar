@@ -33,10 +33,21 @@ export function NewsList({ items, language }: NewsListProps) {
                 <p className="text-sm text-textSecondary leading-relaxed line-clamp-2">
                   {format.contentByLang(news, language)}
                 </p>
-                <p className="text-xs font-medium text-subtle">
-                   {/* Mocking '1 min ago' for now as date format helper usually returns full date */}
-                   1 min ago
-                </p>
+                <div className="flex flex-wrap gap-2 text-xs font-medium mt-2">
+                  {news.category && (
+                    <span className="text-accent bg-accent/10 px-2 py-0.5 rounded">
+                      {news.category.name}
+                    </span>
+                  )}
+                  {news.tags?.map(tag => (
+                    <span key={tag.id} className="text-subtle bg-surface border border-border px-2 py-0.5 rounded">
+                      #{tag.name}
+                    </span>
+                  ))}
+                  <span className="text-subtle py-0.5">
+                     • 1 min ago
+                  </span>
+                </div>
               </div>
               
               <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-2xl overflow-hidden bg-gray-100">

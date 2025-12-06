@@ -5,6 +5,17 @@ export type NewsSource = {
   url?: string;
 };
 
+export type NewsTag = {
+  id: string;
+  name: string;
+};
+
+export type NewsCategory = {
+  id: string;
+  name: string;
+  tags?: NewsTag[];
+};
+
 export type NewsItem = {
   id: string;
   title_en: string;
@@ -17,4 +28,6 @@ export type NewsItem = {
   sources: NewsSource[];
   is_published: boolean;
   is_highlight: boolean;
+  category?: NewsCategory;
+  tags?: NewsTag[];
 };

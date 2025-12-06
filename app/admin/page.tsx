@@ -19,7 +19,7 @@ import {
   adminRunTask
 } from '@/lib/adminTasks';
 import { adminProcessRewrites } from '@/lib/adminLeads';
-import { NewsItem } from '@/types/news';
+import { CategoryManager } from '@/components/admin/CategoryManager';
 
 // --- Types ---
 
@@ -131,7 +131,7 @@ export default function AdminPage() {
   const [pendingCount, setPendingCount] = useState<number>(0);
 
   // UI State
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'sources'>('sources');
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'sources' | 'categories'>('sources');
   const [newsFilter, setNewsFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -370,13 +370,23 @@ export default function AdminPage() {
           </button>
           <button
             onClick={() => setActiveTab('pipeline')}
-            className={`pb-3 text-sm font-semibold transition-colors ${
+            className={`mr-8 pb-3 text-sm font-semibold transition-colors ${
               activeTab === 'pipeline'
                 ? 'border-b-2 border-accent text-accent'
                 : 'text-subtle hover:text-text'
             }`}
           >
             Editorial Pipeline
+          </button>
+          <button
+            onClick={() => setActiveTab('categories')}
+            className={`pb-3 text-sm font-semibold transition-colors ${
+              activeTab === 'categories'
+                ? 'border-b-2 border-accent text-accent'
+                : 'text-subtle hover:text-text'
+            }`}
+          >
+            Categories & Tags
           </button>
         </div>
 
@@ -674,6 +684,14 @@ export default function AdminPage() {
                      </div>
                   )}
                </div>
+            </section>
+          </div>
+        )}
+        {/* View C: Categories */}
+        {activeTab === 'categories' && (
+          <div className="max-w-4xl mx-auto">
+            <section className="glass gradient-border rounded-3xl border border-border/60 p-6 shadow-card">
+              <CategoryManager token={token} />
             </section>
           </div>
         )}

@@ -1,7 +1,7 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   process.env.API_BASE_URL ||
-  'https://api-atap-solar-production.up.railway.app';
+  'https://atap-api-production.up.railway.app';
 
 export type NewsTask = {
   id: string;

@@ -15,7 +15,9 @@ export const mockNews: NewsItem[] = [
     news_date: '2025-04-10T09:00:00Z',
     sources: [{ name: 'TNB Release', url: 'https://www.tnb.com.my/' }],
     is_published: true,
-    is_highlight: true
+    is_highlight: true,
+    category: { id: 'c1', name: 'Policy' },
+    tags: [{ id: 't1', name: 'SME' }, { id: 't2', name: 'Incentives' }]
   },
   {
     id: '2',
@@ -30,7 +32,9 @@ export const mockNews: NewsItem[] = [
     news_date: '2025-04-05T06:00:00Z',
     sources: [{ name: 'Selangor Gov' }],
     is_published: true,
-    is_highlight: true
+    is_highlight: true,
+    category: { id: 'c2', name: 'Residential' },
+    tags: [{ id: 't3', name: 'Pilot Project' }]
   },
   {
     id: '3',
@@ -45,7 +49,9 @@ export const mockNews: NewsItem[] = [
     news_date: '2025-03-27T08:30:00Z',
     sources: [{ name: 'Bank Releases' }],
     is_published: true,
-    is_highlight: false
+    is_highlight: false,
+    category: { id: 'c3', name: 'Finance' },
+    tags: [{ id: 't4', name: 'Banking' }, { id: 't5', name: 'Loans' }]
   },
   {
     id: '4',
@@ -60,6 +66,8 @@ export const mockNews: NewsItem[] = [
     news_date: '2025-03-18T03:45:00Z',
     sources: [{ name: 'Industry Briefing' }],
     is_published: true,
-    is_highlight: false
+    is_highlight: false,
+    category: { id: 'c4', name: 'Commercial' },
+    tags: [{ id: 't6', name: 'PPA' }, { id: 't7', name: 'Tech Park' }]
   }
 ];

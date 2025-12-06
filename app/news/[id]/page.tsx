@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { fetchNewsById } from '@/lib/news';
-import { mockNews } from '@/data/mockNews';
 import { NewsItem, Language } from '@/types/news';
 import { format } from '@/utils/format';
 
@@ -30,23 +29,11 @@ export default function NewsDetail() {
         if (item) {
           setNews(item);
         } else {
-          // Fallback to mock data
-          const mockItem = mockNews.find(n => n.id === id);
-          if (mockItem) {
-            setNews(mockItem);
-          } else {
-            setError(true);
-          }
+           setError(true);
         }
       } catch (err) {
-        console.warn('Error fetching news, trying mock data:', err);
-        // Fallback to mock data
-        const mockItem = mockNews.find(n => n.id === id);
-        if (mockItem) {
-          setNews(mockItem);
-        } else {
-          setError(true);
-        }
+        console.error('Error fetching news:', err);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -108,6 +95,12 @@ export default function NewsDetail() {
               <span className="font-medium text-accent">
                 {format.date(news.news_date)}
               </span>
+              {news.category && (
+                <>
+                  <span className="text-subtle">•</span>
+                  <span className="font-medium text-text">{news.category.name}</span>
+                </>
+              )}
               {news.sources.length > 0 && (
                 <>
                   <span className="text-subtle">•</span>
@@ -115,6 +108,16 @@ export default function NewsDetail() {
                 </>
               )}
             </div>
+            
+            {news.tags && news.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {news.tags.map(tag => (
+                  <span key={tag.id} className="text-xs font-medium text-subtle bg-surface border border-border px-2 py-1 rounded-full">
+                    #{tag.name}
+                  </span>
+                ))}
+              </div>
+            )}
           </header>
 
           <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-gray-100 shadow-sm">

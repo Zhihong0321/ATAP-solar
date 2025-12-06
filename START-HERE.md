@@ -28,4 +28,4 @@ The deployment pipeline needs a clean reset. Please perform the following:
 
 ## Known Configuration
 - **Admin Token**: `@Eternalgy2025` (Configured in `railway.json` env vars)
-- **API Base URL**: `https://api-atap-solar-production.up.railway.app` (Hardcoded fallback in `lib/` files)
+- **API Base URL**: `https://atap-api-production.up.railway.app` (Hardcoded fallback in `lib/` files)
