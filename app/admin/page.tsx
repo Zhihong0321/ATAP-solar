@@ -729,9 +729,9 @@ export default function AdminPage() {
                         <div className="flex-1 space-y-1">
                            <div className="flex items-center gap-2 mb-1">
                               <StatusBadge published={item.is_published} highlight={item.is_highlight} />
-                              {item.category && (
+                              {(item.category || (item.category_id && categories.find(c => c.id === item.category_id))) && (
                                 <span className="rounded-full border border-border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-text">
-                                  {item.category.name}
+                                  {item.category?.name || categories.find(c => c.id === item.category_id)?.name}
                                 </span>
                               )}
                               <span className="text-[10px] text-subtle uppercase tracking-wide">
@@ -777,7 +777,7 @@ export default function AdminPage() {
                                     sources: (item.sources || []).map(s => s.name).join(', '),
                                     is_published: item.is_published,
                                     is_highlight: item.is_highlight,
-                                    category_id: item.category?.id || ''
+                                    category_id: item.category?.id || item.category_id || ''
                                  });
                                  window.scrollTo({ top: 300, behavior: 'smooth' });
                               }}
