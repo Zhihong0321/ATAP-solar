@@ -30,6 +30,25 @@ export function CategoryManager({ token }: CategoryManagerProps) {
     loadCategories();
   }, []);
 
+  // Error boundary to prevent crashes during category operations
+  const handleDeleteCategorySafe = async (id: string) => {
+    if (!confirm('Delete this category? ALL tags inside it will be lost.')) return;
+    setLoading(true);
+    try {
+      await deleteCategory(token, id);
+      setCategories(prev => prev.filter(c => c.id !== id));
+      if (expandedCategoryId === id) setExpandedCategoryId(null);
+    } catch (err: any) {
+      console.error('Category deletion error:', err);
+      setError(`Deletion failed: ${err.message}. This may be due to database schema issues.`);
+      
+      // Refresh categories to ensure list is still usable
+      loadCategories().catch(() => {});
+    } finally {
+      setLoading(false);
+    }
+  };
+
   async function loadCategories() {
     setLoading(true);
     try {
@@ -87,7 +106,11 @@ export function CategoryManager({ token }: CategoryManagerProps) {
       setCategories(prev => prev.filter(c => c.id !== id));
       if (expandedCategoryId === id) setExpandedCategoryId(null);
     } catch (err: any) {
-      setError(err.message);
+      console.error('Category deletion error:', err);
+      setError(`Deletion failed: ${err.message}. This may be due to database schema issues.`);
+      
+      // Refresh categories to ensure list is still usable
+      loadCategories().catch(() => {});
     } finally {
       setLoading(false);
     }
@@ -212,7 +235,7 @@ export function CategoryManager({ token }: CategoryManagerProps) {
                   {expandedCategoryId === cat.id ? 'Done' : 'Manage Tags'}
                 </button>
                 <button
-                  onClick={() => handleDeleteCategory(cat.id)}
+                  onClick={() => handleDeleteCategorySafe(cat.id)}
                   className="text-xs px-2 py-1 rounded border border-border text-red-400 hover:bg-red-500/10"
                 >
                   Delete
