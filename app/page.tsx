@@ -5,7 +5,6 @@ import { Header } from '@/components/Header';
 import { HighlightCarousel } from '@/components/HighlightCarousel';
 import { Countdown } from '@/components/Countdown';
 import { NewsList } from '@/components/NewsList';
-import DateSelector from '@/components/DateSelector';
 import { Footer } from '@/components/Footer';
 import { StockTicker } from '@/components/StockTicker';
 import { Language, NewsItem } from '@/types/news';
@@ -147,9 +146,6 @@ export default function Home() {
 
         {/* Featured Carousel (Main Category Only) */}
         <HighlightCarousel items={highlightedMain.length ? highlightedMain : sortedMainNews.slice(0, 5)} language={language} />
-        
-        {/* Date Timeline */}
-        <DateSelector />
         
         {/* News Feed (Main Category) */}
         <NewsList items={sortedMainNews} language={language} />
