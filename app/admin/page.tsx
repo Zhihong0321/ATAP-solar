@@ -662,6 +662,19 @@ export default function AdminPage() {
                           ))}
                         </select>
 
+                        <div className="col-span-2 flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            id="is_highlight"
+                            checked={newsForm.is_highlight}
+                            onChange={e => setNewsForm({...newsForm, is_highlight: e.target.checked})}
+                            className="rounded border-border text-accent focus:ring-accent"
+                          />
+                          <label htmlFor="is_highlight" className="text-sm text-text">
+                            Mark as Highlight (Featured Carousel)
+                          </label>
+                        </div>
+
                          <textarea
                            placeholder="Content (EN)"
                            value={newsForm.content_en}
@@ -703,6 +716,16 @@ export default function AdminPage() {
                            <p className="line-clamp-1 text-xs text-subtle">{item.content_en}</p>
                         </div>
                         <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                           <button
+                              onClick={() => handleNewsPublish(item, 'is_highlight')}
+                              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+                                 item.is_highlight 
+                                    ? 'bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20' 
+                                    : 'bg-surface border border-border text-subtle hover:text-text'
+                              }`}
+                           >
+                              {item.is_highlight ? 'Unhighlight' : 'Highlight'}
+                           </button>
                            <button
                               onClick={() => handleNewsPublish(item, 'is_published')}
                               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
