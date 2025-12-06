@@ -738,6 +738,16 @@ export default function AdminPage() {
                                  {new Date(item.news_date).toLocaleDateString()}
                               </span>
                            </div>
+                           {item.image_url && (
+                             <div className="relative mt-2 h-20 w-32 overflow-hidden rounded-lg border border-border/50">
+                               <img 
+                                 src={item.image_url} 
+                                 alt="Thumbnail" 
+                                 className="h-full w-full object-cover"
+                                 referrerPolicy="no-referrer"
+                               />
+                             </div>
+                           )}
                            <h3 className="font-medium text-text">{item.title_en}</h3>
                            <p className="line-clamp-1 text-xs text-subtle">{item.content_en}</p>
                         </div>
