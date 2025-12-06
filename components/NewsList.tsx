@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { NewsItem, Language } from '@/types/news';
 import { format } from '@/utils/format';
@@ -11,9 +10,6 @@ type NewsListProps = {
 
 export function NewsList({ items, language }: NewsListProps) {
   if (!items.length) return null;
-
-  // Placeholder image for list items
-  const placeholderImg = 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=400&q=80';
 
   return (
     <section className="w-full px-4 pb-12">
@@ -49,15 +45,6 @@ export function NewsList({ items, language }: NewsListProps) {
                      • 1 min ago
                   </span>
                 </div>
-              </div>
-              
-              <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-2xl overflow-hidden bg-gray-100">
-                 <Image 
-                   src={news.image_url || placeholderImg} 
-                   alt={format.titleByLang(news, language)}
-                   fill
-                   className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-                 />
               </div>
             </article>
           </Link>

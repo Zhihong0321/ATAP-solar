@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -70,9 +69,6 @@ export default function NewsDetail() {
     );
   }
 
-  // Placeholder logic consistent with NewsList
-  const bgImage = news.image_url || 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1200&q=80';
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header currentLanguage={language} onLanguageChange={setLanguage} />
@@ -121,18 +117,6 @@ export default function NewsDetail() {
               </div>
             )}
           </header>
-
-          <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-gray-100 shadow-sm">
-            <Image 
-              src={bgImage} 
-              alt={format.titleByLang(news, language)}
-              fill
-              unoptimized
-              referrerPolicy="no-referrer"
-              className="object-cover"
-              priority
-            />
-          </div>
 
           <div 
             className="prose prose-lg prose-stone max-w-none text-text/90 leading-relaxed whitespace-pre-line"

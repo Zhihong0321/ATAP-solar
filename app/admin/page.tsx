@@ -34,7 +34,6 @@ type NewsFormState = {
   content_cn: string;
   content_my: string;
   news_date: string;
-  image_url: string;
   sources: string; // comma separated names
   is_published: boolean;
   is_highlight: boolean;
@@ -49,7 +48,6 @@ const emptyNewsForm: NewsFormState = {
   content_cn: '',
   content_my: '',
   news_date: new Date().toISOString(),
-  image_url: '',
   sources: '',
   is_published: true,
   is_highlight: false,
@@ -354,8 +352,7 @@ export default function AdminPage() {
       const fresh = await fetchNewsById(id);
       if (fresh) {
         setNews((prev) => prev.map((n) => (n.id === id ? fresh : n)));
-        const hasImg = fresh.image_url && fresh.image_url.startsWith('http');
-        alert(`Refreshed: ${fresh.title_en}\nCategory: ${fresh.category?.name || 'None'}\nImage: ${hasImg ? 'URL Present' : 'No URL'}`);
+        alert(`Refreshed: ${fresh.title_en}\nCategory: ${fresh.category?.name || 'None'}`);
       } else {
         alert('Failed to fetch fresh data.');
       }
@@ -697,13 +694,6 @@ export default function AdminPage() {
                           ))}
                         </select>
 
-                        <input
-                           placeholder="Image URL"
-                           value={newsForm.image_url}
-                           onChange={e => setNewsForm({...newsForm, image_url: e.target.value})}
-                           className="col-span-2 rounded-lg border border-border bg-surface/60 px-3 py-2 text-sm text-text"
-                        />
-
                         <div className="col-span-2 flex items-center gap-2">
                           <input
                             type="checkbox"
@@ -754,20 +744,6 @@ export default function AdminPage() {
                                  {new Date(item.news_date).toLocaleDateString()}
                               </span>
                            </div>
-                           {item.image_url && item.image_url.startsWith('http') && (
-                             <div className="relative mt-2 h-20 w-32 overflow-hidden rounded-lg border border-border/50">
-                               <img 
-                                 src={item.image_url} 
-                                 alt="Thumbnail" 
-                                 className="h-full w-full object-cover"
-                                 referrerPolicy="no-referrer"
-                                 onError={(e) => {
-                                   e.currentTarget.style.display = 'none';
-                                   e.currentTarget.parentElement!.innerHTML = '<span class="text-[10px] text-red-400 p-2 flex h-full items-center justify-center bg-gray-50">Broken Link</span>';
-                                 }}
-                               />
-                             </div>
-                           )}
                            <h3 className="font-medium text-text">{item.title_en}</h3>
                            <p className="line-clamp-1 text-xs text-subtle">{item.content_en}</p>
                         </div>
@@ -803,7 +779,6 @@ export default function AdminPage() {
                                     content_cn: item.content_cn,
                                     content_my: item.content_my,
                                     news_date: item.news_date,
-                                    image_url: item.image_url || '',
                                     sources: (item.sources || []).map(s => s.name).join(', '),
                                     is_published: item.is_published,
                                     is_highlight: item.is_highlight,
