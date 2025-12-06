@@ -20,6 +20,7 @@ import {
 } from '@/lib/adminTasks';
 import { adminProcessRewrites } from '@/lib/adminLeads';
 import { CategoryManager } from '@/components/admin/CategoryManager';
+import { NewsItem } from '@/types/news';
 
 // --- Types ---
 
