@@ -31,13 +31,36 @@ function date(value: string) {
   });
 }
 
-function source(url: string) {
-  try {
-    const { hostname } = new URL(url);
-    return hostname.replace('www.', '');
-  } catch (e) {
-    return url;
+function source(raw: unknown) {
+  if (!raw) return 'Source';
+
+  // Strings: keep existing hostname extraction.
+  if (typeof raw === 'string') {
+    try {
+      const { hostname } = new URL(raw);
+      return hostname.replace('www.', '');
+    } catch {
+      return raw;
+    }
   }
+
+  // Objects from API: prefer name, then url hostname, then stringify safely.
+  if (typeof raw === 'object') {
+    const obj = raw as { name?: string; url?: string };
+    if (obj.name) return obj.name;
+    if (obj.url) {
+      try {
+        const { hostname } = new URL(obj.url);
+        return hostname.replace('www.', '');
+      } catch {
+        return obj.url;
+      }
+    }
+    return '[source]';
+  }
+
+  // Fallback for numbers/others.
+  return String(raw);
 }
 
 export const format = {

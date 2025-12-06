@@ -29,7 +29,7 @@ export type NewsItem = {
   content_my: string;
   news_date: string;
   image_url?: string;
-  sources: string[]; // URLs
+  sources: Array<string | { name?: string; url?: string }>; // API may return strings or objects
   is_published: boolean;
   is_highlight: boolean;
   category_id?: string;
