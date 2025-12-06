@@ -98,6 +98,24 @@ export default function Home() {
       .sort((a, b) => new Date(b.news_date).getTime() - new Date(a.news_date).getTime());
   };
 
+  // Identify news that didn't fit into Main or any specific Category sections
+  const uncategorizedNews = useMemo(() => {
+    const categorizedIds = new Set<string>();
+    
+    // Add Main Category News IDs
+    mainNews.forEach(n => categorizedIds.add(n.id));
+    
+    // Add Other Categories News IDs
+    otherCategories.forEach(cat => {
+      getNewsForCategory(cat.id).forEach(n => categorizedIds.add(n.id));
+    });
+
+    // Return news not in the set
+    return news
+      .filter(n => !categorizedIds.has(n.id))
+      .sort((a, b) => new Date(b.news_date).getTime() - new Date(a.news_date).getTime());
+  }, [news, mainNews, otherCategories]);
+
   return (
     <div className="min-h-screen bg-background">
       <Header currentLanguage={language} onLanguageChange={setLanguage} />
@@ -158,6 +176,16 @@ export default function Home() {
             );
           })}
         </div>
+
+        {/* Fallback: Uncategorized / Latest News */}
+        {uncategorizedNews.length > 0 && (
+          <section className="border-t border-border pt-8 mt-8">
+            <div className="px-4 mb-6">
+              <h2 className="text-2xl font-bold text-text">Latest News</h2>
+            </div>
+            <NewsList items={uncategorizedNews} language={language} />
+          </section>
+        )}
       </main>
 
       <Footer />
