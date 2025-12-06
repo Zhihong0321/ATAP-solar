@@ -78,3 +78,11 @@ export async function adminDeleteNews(token: string, id: string): Promise<void> 
     body: JSON.stringify({})
   });
 }
+
+export async function adminRewriteNews(token: string, id: string): Promise<void> {
+  await request<void>(`/api/v1/news/${id}/rewrite`, {
+    method: 'POST',
+    headers: authHeaders(token),
+    body: JSON.stringify({})
+  });
+}

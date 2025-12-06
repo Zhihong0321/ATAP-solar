@@ -8,7 +8,8 @@ import {
   adminCreateNews,
   adminDeleteNews,
   adminPublishNews,
-  adminUpdateNews
+  adminUpdateNews,
+  adminRewriteNews
 } from '@/lib/adminApi';
 import {
   NewsTask,
@@ -361,6 +362,20 @@ export default function AdminPage() {
     } catch (e) {
       console.error(e);
     } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleRewriteItem(id: string) {
+    if (!confirm('Rewrite this news item? This will trigger the AI to re-process the content.')) return;
+    setSaving(true);
+    try {
+      await adminRewriteNews(token, id);
+      alert('Rewrite request sent. The content will update shortly.');
+      // Automatically refresh after a short delay to check for updates
+      setTimeout(() => handleRefreshItem(id), 5000);
+    } catch (err: any) {
+      setError(err.message);
       setSaving(false);
     }
   }
@@ -812,6 +827,13 @@ export default function AdminPage() {
                               title="Refresh from DB"
                            >
                               ↻
+                           </button>
+                           <button
+                              onClick={() => handleRewriteItem(item.id)}
+                              className="rounded-lg px-2 py-1.5 text-xs text-subtle hover:text-purple-400"
+                              title="AI Rewrite"
+                           >
+                              ✨
                            </button>
                         </div>
                      </div>
