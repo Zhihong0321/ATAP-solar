@@ -31,10 +31,16 @@ Endpoint: `GET /api/v1/news`
 ```
 **Meaning**: The database connection has dropped again. It seems the backend service or database is unstable and restarting/crashing periodically.
 
-### 5. CORS Missing
-The headers returned by the API do **not** include `Access-Control-Allow-Origin`.
-This will cause the frontend to fail with "Network Error" even when the API returns 200, because the browser blocks the response.
+### 6. Category Update FAIL (Sat, 06 Dec 2025 08:15 GMT)
+The `PUT /api/v1/news/{id}` endpoint **ignores** category updates completely.
 
-## Action Required for Backend Team
-1.  **Fix Database Stability**: The connection is flapping.
-2.  **Enable CORS**: You must set `Access-Control-Allow-Origin: *` (or the specific frontend domain) in your backend configuration. Without this, the frontend cannot load data.
+We tested the following payloads against a live news item:
+1. `category_id: "uuid"` -> **Result: Ignored (null)**
+2. `categoryId: "uuid"` -> **Result: Ignored (null)**
+3. `category: "uuid"` -> **Result: Ignored (null)**
+4. `category: { connect: { id: "uuid" } }` -> **Result: Ignored (null)**
+
+**Conclusion**: The backend `UPDATE` logic is broken. It is likely stripping the category field before saving to the database, or the Prisma update query is missing the relation update.
+
+**Action Required for Backend Team**:
+Fix the `PUT` handler to actually accept and save the category relation. Check your controller/service code.
