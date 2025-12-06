@@ -169,9 +169,18 @@ export default function AdminPage() {
     setError(null);
     try {
       const [newsData, tasksData, pendingBatch] = await Promise.all([
-        fetchNews({ limit: 100, offset: 0, content_status: 'filled' }),
-        adminFetchTasks(authToken).catch(() => []),
-        fetchNews({ limit: 100, content_status: 'empty' }).catch(() => [])
+        fetchNews({ limit: 100, offset: 0, content_status: 'filled' }).catch((e) => {
+          console.error('Failed to fetch filled news:', e);
+          return [];
+        }),
+        adminFetchTasks(authToken).catch((e) => {
+          console.error('Failed to fetch tasks:', e);
+          return [];
+        }),
+        fetchNews({ limit: 100, content_status: 'empty' }).catch((e) => {
+          console.error('Failed to fetch empty news:', e);
+          return [];
+        })
       ]);
       setNews(newsData);
       setTasks(tasksData);
