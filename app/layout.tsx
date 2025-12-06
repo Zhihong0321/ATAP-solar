@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   title: 'Malaysia Solar Atap News | Your Rooftop Solar News Hub',
   description: 'The latest news and insights on solar energy in Malaysia. We cover everything from rooftop solar to large-scale solar projects, helping you stay informed on the Malaysian solar industry.',
   icons: {
-    icon: '/logo-v2.webp',
-    apple: '/logo-v2.webp',
+    icon: '/logo-v2.png',
+    apple: '/logo-v2.png',
   },
 };
 
