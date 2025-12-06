@@ -11,7 +11,8 @@ const playfair = Playfair_Display({
 const notoSerifCn = Noto_Serif_SC({
   subsets: ['latin'],
   variable: '--font-serif-cn',
-  display: 'swap'
+  display: 'swap',
+  weight: '400'
 });
 
 const inter = Inter({
